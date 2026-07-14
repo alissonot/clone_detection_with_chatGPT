@@ -1,0 +1,666 @@
+Processing: tests/test_lowlevel.py
+ChatGPT Response:
+Part 1: Summary Report
+- Total number of test functions analyzed: 13
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 4
+- Main reasons for rejection:
+  - Different function call structure (different keywords/args)
+  - Different number of statements (including differences inside nested handler defs)
+  - Different assertions and assertion counts
+  - Different control-flow/interaction steps with the server (number of request/response exchanges)
+
+
+Part 2: Accepted Parametrizable Clone Classes
+No accepted clone classes (no Type-1 or Type-2 parametrizable clones found).
+
+
+Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: <current file>, Function: test_chunked_upload_uses_only_specified_host_header
+  - File: <current file>, Function: test_chunked_upload_doesnt_skip_host_header
+- Apparent similarity:
+  - Both start an echo server, stream chunked request body, and then assert about the Host header in the echoed raw request.
+- Rejection reason:
+  - Different function call structure: one call passes headers={"Host": ...}, the other does not (Rule 4).
+  - Different number/placement of statements: one assigns custom_host before the with-block; the other computes expected_host inside the with-block (Rule 1).
+- Correct classification:
+  - Type-3 / not safely parametrizable
+
+Rejected Group 2:
+- Functions:
+  - File: <current file>, Function: test_chunked_encoding_error
+  - File: <current file>, Function: test_conflicting_content_lengths
+- Apparent similarity:
+  - Both define a custom server handler, run a one-shot server, perform a GET, and expect a specific requests.exceptions error via pytest.raises.
+- Rejection reason:
+  - Different number of statements in the nested handler bodies: one assigns the response to a variable before sending, the other sends a literal directly (Rule 1). Nested handler content is part of the test body.
+- Correct classification:
+  - Type-3 / structural difference
+
+Rejected Group 3:
+- Functions:
+  - File: <current file>, Function: test_digestauth_401_count_reset_on_redirect
+  - File: <current file>, Function: test_digestauth_401_only_sent_once
+- Apparent similarity:
+  - Both set up digest auth, define a digest challenge handler, perform a GET with auth, and assert on status/history.
+- Rejection reason:
+  - Different number of server interaction steps and assertions; different expectations on history and final status (Rules 1 and 2).
+  - Different internal handler sequences (different numbers of send/consume cycles) change control flow/structure (Rule 3).
+- Correct classification:
+  - Type-3 / structural difference
+
+Rejected Group 4:
+- Functions:
+  - File: <current file>, Function: test_redirect_rfc1808_to_non_ascii_location
+  - File: <current file>, Function: test_fragment_update_on_redirect
+- Apparent similarity:
+  - Both drive redirect handling behavior and assert on final URL/history.
+- Rejection reason:
+  - Different control flow and number of redirect steps (single 301 vs chained 302s) and different numbers of assertions (Rules 1 and 3).
+- Correct classification:
+  - Type-3 / structural difference
+--------------------------------------------------
+Processing: tests/test_adapters.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None (only one test function; no candidates to compare)
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+None
+
+### Part 3: Rejected Candidate Groups
+
+None
+--------------------------------------------------
+Processing: tests/test_hooks.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 2
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection: different decorators, different function signatures, different function call structure; not safely parametrizable
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+None
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: (single provided file), Function: test_hooks
+  - File: (single provided file), Function: test_default_hooks
+- Apparent similarity:
+  - Both are single-assert tests targeting the requests.hooks module.
+- Rejection reason:
+  - Rejected: different decorators (one is parametrized, the other is not)
+  - Rejected: different fixtures/signatures (parameters vs none)
+  - Rejected: different function call structure (dispatch_hook with multiple args vs default_hooks with none)
+  - Rejected: not safely parametrizable
+- Correct classification:
+  - Rejected: semantic clone only
+--------------------------------------------------
+Processing: tests/test_utils.py
+ChatGPT Response:
+Part 1: Summary Report
+
+- Total number of test functions analyzed: 62
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 9
+- Main reasons for rejection:
+  - Different assertion operators or expectations (== vs !=, == vs “is None”, use of unary not)
+  - Different number of statements (extra setup/assignments/monkeypatching)
+  - Different decorators/parametrization shapes
+  - Different function call targets (would require passing a callable/dynamic dispatch)
+  - Different function signatures/fixtures
+
+
+Part 2: Accepted Parametrizable Clone Classes
+
+None
+
+
+Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: <single input file>, Function: TestGetNetrcAuth.test_works
+  - File: <single input file>, Function: TestGetNetrcAuth.test_not_vulnerable_to_bad_url_parsing
+- Apparent similarity:
+  - Both set NETRC via monkeypatch, write identical .netrc content, call get_netrc_auth, then assert on the result.
+- Rejection reason:
+  - Rejected: different asserts/statements (assert auth == tuple vs assert auth is None)
+- Correct classification:
+  - Type-3 / not safely parametrizable
+
+Rejected Group 2:
+- Functions:
+  - File: <single input file>, Function: TestGetEnvironProxies.test_bypass
+  - File: <single input file>, Function: TestGetEnvironProxies.test_not_bypass
+- Apparent similarity:
+  - Same parametrization over url, single call to get_environ_proxies with no_proxy=None.
+- Rejection reason:
+  - Rejected: different asserts/statements (== {} vs != {})
+- Correct classification:
+  - Type-3 / not safely parametrizable
+
+Rejected Group 3:
+- Functions:
+  - File: <single input file>, Function: TestGetEnvironProxies.test_bypass_no_proxy_keyword
+  - File: <single input file>, Function: TestGetEnvironProxies.test_not_bypass_no_proxy_keyword
+- Apparent similarity:
+  - Both check behavior under explicit no_proxy keyword.
+- Rejection reason:
+  - Rejected: different asserts/statements (== {} vs != {})
+  - Rejected: different number of statements (one also monkeypatches an environment variable)
+- Correct classification:
+  - Type-3 / not safely parametrizable
+
+Rejected Group 4:
+- Functions:
+  - File: <single input file>, Function: TestExtractZippedPaths.test_unzipped_paths_unchanged
+  - File: <single input file>, Function: TestExtractZippedPaths.test_invalid_unc_path
+- Apparent similarity:
+  - Both assert extract_zipped_paths(path) leaves path unchanged.
+- Rejection reason:
+  - Rejected: different decorators (first is parametrized; second is not)
+  - Minor structural difference (operand order in equality), but decorators alone are disqualifying
+- Correct classification:
+  - Not a parametrizable Type-2 clone
+
+Rejected Group 5:
+- Functions:
+  - File: <single input file>, Function: TestGuessJSONUTF.test_encoded
+  - File: <single input file>, Function: TestGuessJSONUTF.test_guess_by_bom
+- Apparent similarity:
+  - Both create data bytes and assert guess_json_utf(data) equals a parameter.
+- Rejection reason:
+  - Rejected: different fixtures/signatures (one has only encoding; the other has encoding and expected)
+  - Rejected: different decorators (different parameter shapes)
+- Correct classification:
+  - Not a parametrizable Type-2 clone
+
+Rejected Group 6:
+- Functions:
+  - File: <single input file>, Function: test_requote_uri_with_unquoted_percents
+  - File: <single input file>, Function: test_unquote_unreserved
+- Apparent similarity:
+  - Both are one-line “assert func(uri) == expected” parametrized tests.
+- Rejection reason:
+  - Rejected: different attributes or methods / different call targets (would require passing function as a parameter and dynamic dispatch)
+- Correct classification:
+  - Semantic similarity only
+
+Rejected Group 7:
+- Functions:
+  - File: <single input file>, Function: test_get_auth_from_url
+  - File: <single input file>, Function: test_urldefragauth
+- Apparent similarity:
+  - Both are parametrized over url and expected and assert func(url) == expected.
+- Rejection reason:
+  - Rejected: different attributes or methods / different call targets (would require dynamic callable parameter)
+- Correct classification:
+  - Semantic similarity only
+
+Rejected Group 8:
+- Functions:
+  - File: <single input file>, Function: test_to_native_string
+  - File: <single input file>, Function: test_unicode_is_ascii
+- Apparent similarity:
+  - Both are parametrized over value and expected and assert on a transformation/predicate.
+- Rejection reason:
+  - Rejected: different call targets
+  - Rejected: different asserts (== vs “is”)
+- Correct classification:
+  - Type-3 / semantic clone
+
+Rejected Group 9:
+- Functions:
+  - File: <single input file>, Function: TestAddressInNetwork.test_valid
+  - File: <single input file>, Function: TestAddressInNetwork.test_invalid
+- Apparent similarity:
+  - Both assert boolean outcome of address_in_network with similar structure.
+- Rejection reason:
+  - Rejected: different asserts/statements (assert expr vs assert not expr)
+- Correct classification:
+  - Type-3 / structural difference
+
+Notes:
+- No Type-1 clones were found (no pairs with identical bodies modulo formatting/comments/docstrings).
+- Many superficially similar tests differ in operators, additional setup statements, parameterization, or function targets; under the strict rules these are not safely parametrizable Type-2 clones.
+--------------------------------------------------
+Processing: tests/test_requests.py
+ChatGPT Response:
+Part 1: Summary Report
+
+- Total number of test functions analyzed: 233
+- Total number of parametrizable Type-1 clone classes: 1
+- Total number of parametrizable Type-2 clone classes: 3
+- Total number of cloned test functions included in accepted clone classes: 9
+- Total number of rejected candidate groups: 12
+- Main reasons for rejection:
+  - Different number of statements or asserts
+  - Different function call structures (different kwargs/arity)
+  - Different attributes/methods that would require dynamic selection (e.g., getattr or switching APIs)
+  - Different decorators or fixtures/signatures
+  - Structural/operator differences (e.g., “in” vs “not in”)
+
+
+Part 2: Accepted Parametrizable Clone Classes
+
+Clone Class 1:
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Identical structure and assertions; only the redirect status code literal differs. Same signature and no decorators.
+- Members:
+  - File: tests/test_requests.py, Function: TestRequests.test_http_301_changes_post_to_get
+  - File: tests/test_requests.py, Function: TestRequests.test_http_302_changes_post_to_get
+  - File: tests/test_requests.py, Function: TestRequests.test_http_303_changes_post_to_get
+- Extracted parameters:
+  - code: redirect status code (301, 302, 303)
+
+Clone Class 2:
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Same structure: HEAD request with allow_redirects=True and the same sequence of assertions; differing only by the redirect status code.
+- Members:
+  - File: tests/test_requests.py, Function: TestRequests.test_http_302_doesnt_change_head_to_get
+  - File: tests/test_requests.py, Function: TestRequests.test_http_303_doesnt_change_head_to_get
+- Extracted parameters:
+  - code: redirect status code (302, 303)
+
+Clone Class 3:
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Same structure: construct adapter, compute proxy headers, and assert the exact Proxy-Authorization header; differing only in proxy URL and expected header value.
+- Members:
+  - File: tests/test_requests.py, Function: TestRequests.test_proxy_auth
+  - File: tests/test_requests.py, Function: TestRequests.test_proxy_auth_empty_pass
+- Extracted parameters:
+  - proxy_url: proxy URL with credentials
+  - expected_header: expected Proxy-Authorization value
+
+Clone Class 4:
+- Clone type: Type-1
+- Parametrizable: Yes
+- Reason: Bodies are identical (single with pytest.raises(InvalidHeader): requests.get(..., headers=invalid_header)). Both are individually parametrized over the same single argument name; shapes are compatible.
+- Members:
+  - File: tests/test_requests.py, Function: TestRequests.test_header_no_return_chars
+  - File: tests/test_requests.py, Function: TestRequests.test_header_no_leading_space
+- Extracted parameters:
+  - invalid_header: header dictionaries expected to raise InvalidHeader
+
+
+Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_http_301_doesnt_change_head_to_get
+  - File: tests/test_requests.py, Function: TestRequests.test_http_302_doesnt_change_head_to_get
+  - File: tests/test_requests.py, Function: TestRequests.test_http_303_doesnt_change_head_to_get
+- Apparent similarity:
+  - Same HEAD redirect scenario and similar assertions with only status code differing.
+- Rejection reason:
+  - Different number of statements (print in the 301 variant)
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 2:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_POSTBIN_GET_POST_FILES
+  - File: tests/test_requests.py, Function: TestRequests.test_POSTBIN_GET_POST_FILES_WITH_DATA
+- Apparent similarity:
+  - Same multi-part POST flow with similar assertions.
+- Rejection reason:
+  - Different function call structure (one call passes files=..., the other passes data=... and files=...)
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 3:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_no_body_content_length
+  - File: tests/test_requests.py, Function: TestRequests.test_empty_content_length
+- Apparent similarity:
+  - Both prepare a Request for methods POST/PUT/PATCH/OPTIONS and assert Content-Length == "0".
+- Rejection reason:
+  - Different function call structure (one includes data="" kwarg, the other does not)
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 4:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_session_get_adapter_prefix_with_trailing_slash
+  - File: tests/test_requests.py, Function: TestRequests.test_session_get_adapter_prefix_without_trailing_slash
+- Apparent similarity:
+  - Both mount an adapter on similar prefixes and assert adapter selection.
+- Rejection reason:
+  - Structural/operator difference in assertions (is vs is not)
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 5:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_empty_stream_with_auth_does_not_set_content_length_header
+  - File: tests/test_requests.py, Function: TestRequests.test_stream_with_auth_does_not_set_transfer_encoding_header
+- Apparent similarity:
+  - Same pattern: prepare request with stream body and assert header presence/absence.
+- Rejection reason:
+  - Structural/operator differences (“in” vs “not in” for the same headers)
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 6:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_HTTP_200_OK_HEAD
+  - File: tests/test_requests.py, Function: TestRequests.test_HTTP_200_OK_PUT
+- Apparent similarity:
+  - Simple request then assert 200.
+- Rejection reason:
+  - Different methods (requests.head vs requests.put) would require dynamic method selection to parametrize
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 7:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_prepared_request_is_pickleable
+  - File: tests/test_requests.py, Function: TestRequests.test_prepared_request_with_file_is_pickleable
+- Apparent similarity:
+  - Pickle/unpickle PreparedRequest and send, then assert 200.
+- Rejection reason:
+  - Different number of statements (file context manager and multipart setup vs simple GET)
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 8:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_rewind_body_no_seek
+  - File: tests/test_requests.py, Function: TestRequests.test_rewind_body_failed_seek
+  - File: tests/test_requests.py, Function: TestRequests.test_rewind_body_failed_tell
+- Apparent similarity:
+  - All construct a BadFileObj, prepare request, expect UnrewindableBodyError.
+- Rejection reason:
+  - Different internal class definitions/behaviors and different expected messages; structural differences
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 9:
+- Functions:
+  - File: tests/test_requests.py, Function: TestPreparingURLs.test_json_decode_compatibility
+  - File: tests/test_requests.py, Function: TestPreparingURLs.test_json_decode_persists_doc_attr
+- Apparent similarity:
+  - Both provoke JSONDecodeError on non-JSON content.
+- Rejection reason:
+  - Different number of asserts and different asserted properties
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 10:
+- Functions:
+  - File: tests/test_requests.py, Function: TestTimeout.test_connect_timeout
+  - File: tests/test_requests.py, Function: TestTimeout.test_total_timeout_connect
+- Apparent similarity:
+  - Both exercise connect timeouts using TARPIT.
+- Rejection reason:
+  - Different assertions inside except block (one checks isinstance, the other just passes)
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 11:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_cookie_as_dict_keys
+  - File: tests/test_requests.py, Function: TestRequests.test_cookie_as_dict_values
+  - File: tests/test_requests.py, Function: TestRequests.test_cookie_as_dict_items
+- Apparent similarity:
+  - Same setup of cookie jar and list-like checks.
+- Rejection reason:
+  - Different attributes/methods used (keys vs values vs items) would require dynamic attribute selection
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+Rejected Group 12:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_proxy_authorization_preserved_on_request
+  - File: tests/test_requests.py, Function: TestRequests.test_proxy_authorization_not_appended_to_https_request
+- Apparent similarity:
+  - Both about Proxy-Authorization handling.
+- Rejection reason:
+  - Different decorators (second is parametrized), different fixtures/signatures (first uses httpbin, second parametrizes url/has_proxy_auth)
+- Correct classification:
+  - Not a clone / different decorators and fixtures
+
+Rejected Group 13:
+- Functions:
+  - File: tests/test_requests.py, Function: TestRequests.test_session_get_adapter_prefix_matching_mixed_case
+  - File: tests/test_requests.py, Function: TestRequests.test_session_get_adapter_prefix_matching_is_case_insensitive
+- Apparent similarity:
+  - Same mounting and adapter retrieval patterns; only the URL under test differs in case handling intent.
+- Rejection reason:
+  - Structural difference in assignment of the URL variable (one builds via concatenation with mixed_case_prefix, the other is a standalone string literal)
+- Correct classification:
+  - Type-3 / non-parametrizable
+--------------------------------------------------
+Processing: tests/test_packages.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 1
+- Total number of cloned test functions included in accepted clone classes: 3
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: N/A
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+Clone Class 1:
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has an identical single-statement body accessing requests.packages.<name>. They differ only in the final attribute identifier, which can be safely parametrized by passing the target object as a parameter value.
+- Members:
+  - File: <input>, Function: test_can_access_urllib3_attribute
+  - File: <input>, Function: test_can_access_idna_attribute
+  - File: <input>, Function: test_can_access_chardet_attribute
+- Extracted parameters:
+  - pkg: the requests.packages submodule/object to access (values: requests.packages.urllib3, requests.packages.idna, requests.packages.chardet)
+
+### Part 3: Rejected Candidate Groups
+
+None.
+--------------------------------------------------
+Processing: tests/test_testserver.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 11
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of statements in the test body
+  - Different control flow (nested context managers, exceptions)
+  - Different function call structure (calls with different argument shapes or object-vs-call in with-statement)
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable clone classes found.
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: <current>, Function: TestTestServer.test_text_response
+  - File: <current>, Function: TestTestServer.test_basic_response
+- Apparent similarity:
+  - Both open a server context returning (host, port), perform requests.get to the server, and assert status_code, body text, and Content-Length header.
+- Rejection reason:
+  - Different number of statements in the test body (one has a prior assignment to server; the other calls the factory inline).
+  - Different function call structure to construct the server (text_response_server with an argument vs basic_response_server with no arguments; one used as a pre-created object, the other called in the with-statement).
+- Correct classification:
+  - Type-3 / non-parametrizable under strict rules.
+
+Rejected Group 2:
+- Functions:
+  - File: <current>, Function: TestTestServer.test_requests_after_timeout_are_not_received
+  - File: <current>, Function: TestTestServer.test_request_recovery_with_bigger_timeout
+- Apparent similarity:
+  - Both create a basic_response_server with a request_timeout, open it as address, connect a socket, sleep, send data, close, and assert handler_results[0].
+- Rejection reason:
+  - Different number of statements (the latter introduces an extra assignment data = b"...", while the former inlines the literal).
+- Correct classification:
+  - Type-3 / non-parametrizable Type-2 under strict rules.
+
+Rejected Group 3:
+- Functions:
+  - File: <current>, Function: TestTestServer.test_server_finishes_on_error
+  - File: <current>, Function: TestTestServer.test_server_finishes_when_no_connections
+- Apparent similarity:
+  - Both create a basic_response_server, enter/exit context(s), and finally assert len(server.handler_results) == 0.
+- Rejection reason:
+  - Different control flow: one uses with pytest.raises(...) and a nested with plus an explicit raise, the other is a simple with and pass.
+  - Different number of statements and control structures.
+- Correct classification:
+  - Type-3 / structural difference.
+--------------------------------------------------
+Processing: tests/test_structures.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 10
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 1
+- Total number of cloned test functions included in accepted clone classes: 2
+- Total number of rejected candidate groups: 4
+- Main reasons for rejection:
+  - Different asserts/statements count
+  - Different function call structure (e.g., subscript vs method call, extra inner call)
+  - Different attributes/methods usage
+  - Different scope (methods in different classes)
+
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+Clone Class 1:
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have a single assert of the form assert FUNC(self.case_insensitive_dict) == EXPECTED. They differ only in the callable used (list vs repr) and the expected literal value; the structural template and statement count are identical, with no control flow differences or decorator/signature differences.
+- Members:
+  - File: <input>, Function: TestCaseInsensitiveDict.test_list
+  - File: <input>, Function: TestCaseInsensitiveDict.test_repr
+- Extracted parameters:
+  - op: callable to apply (e.g., list, repr)
+  - expected: expected result
+
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: <input>, Function: TestCaseInsensitiveDict.test_getitem
+  - File: <input>, Function: TestCaseInsensitiveDict.test_delitem
+- Apparent similarity:
+  - Same decorator and parameter (key), both operate on the same CaseInsensitiveDict and check behavior with different key casings.
+- Rejection reason:
+  - Rejected: different asserts/statements (test_delitem has a deletion plus an assert; test_getitem has only one assert)
+- Correct classification:
+  - Type-3 / structural difference
+
+Rejected Group 2:
+- Functions:
+  - File: <input>, Function: TestCaseInsensitiveDict.test_list
+  - File: <input>, Function: TestCaseInsensitiveDict.test_lower_items
+- Apparent similarity:
+  - Single assert comparing list(...) output to an expected literal.
+- Rejection reason:
+  - Rejected: different function call structure and different attributes/methods (list(self.case_insensitive_dict) vs list(self.case_insensitive_dict.lower_items()) adds an extra method call)
+- Correct classification:
+  - Type-3 / structural difference
+
+Rejected Group 3:
+- Functions:
+  - File: <input>, Function: TestLookupDict.test_getitem
+  - File: <input>, Function: TestLookupDict.test_get
+- Apparent similarity:
+  - Same parametrization and signature; both assert that a lookup by key equals value.
+- Rejection reason:
+  - Rejected: different function call structure and different attributes/methods (subscription self.lookup_dict[key] vs method call self.lookup_dict.get(key))
+- Correct classification:
+  - Type-3 / structural difference
+
+Rejected Group 4:
+- Functions:
+  - File: <input>, Function: TestCaseInsensitiveDict.test_repr
+  - File: <input>, Function: TestLookupDict.test_repr
+- Apparent similarity:
+  - Single assert verifying repr(obj) against a literal string.
+- Rejection reason:
+  - Rejected: different scope (methods in different classes)
+- Correct classification:
+  - Non-parametrizable across scopes (not a valid clone group under the rules)
+--------------------------------------------------
+Processing: tests/test_help.py
+ChatGPT Response:
+Part 1: Summary Report
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 1
+- Total number of cloned test functions included in accepted clone classes: 2
+- Total number of rejected candidate groups: 2
+- Main reasons for rejection: different control flow (with-statement vs none), different statement structure
+
+Part 2: Accepted Parametrizable Clone Classes
+
+Clone Class 1:
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests use an identical with mock.patch("requests.help.idna", new=...) context followed by a single assert on info()["idna"] against {"version": ...}. They differ only in the patched replacement object and the expected version string.
+- Members:
+  - File: <provided file>, Function: test_idna_without_version_attribute
+  - File: <provided file>, Function: test_idna_with_version_attribute
+- Extracted parameters:
+  - idna_replacement (values: None; VersionedPackage("2.6"))
+  - expected_version (values: ""; "2.6")
+
+Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: <provided file>, Function: test_system_ssl
+  - File: <provided file>, Function: test_idna_without_version_attribute
+- Apparent similarity:
+  - Both assert on values derived from requests.help.info() related to versions.
+- Rejection reason:
+  - Different control flow (one has a with mock.patch context, the other does not)
+  - Different statement structure
+- Correct classification:
+  - Type-3 / structural difference
+
+Rejected Group 2:
+- Functions:
+  - File: <provided file>, Function: test_system_ssl
+  - File: <provided file>, Function: test_idna_with_version_attribute
+- Apparent similarity:
+  - Both assert on values derived from requests.help.info() related to versions.
+- Rejection reason:
+  - Different control flow (one has a with mock.patch context, the other does not)
+  - Different statement structure
+- Correct classification:
+  - Type-3 / structural difference
+--------------------------------------------------

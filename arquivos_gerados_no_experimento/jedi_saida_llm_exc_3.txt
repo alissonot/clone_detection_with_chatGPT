@@ -1,0 +1,4878 @@
+Processing: test_utils.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 10
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 2
+- Total number of cloned test functions included in accepted clone classes: 4
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of statements/asserts
+  - Different control flow structures
+  - Different setup/cleanup structure
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same structure: two equality assertions, each calling `self.complete(...)` with one string argument and comparing the result to a one-element list. They differ only in input string literals and expected string literals.
+
+- Members:
+  - File: `<provided file>`, Function: `TestSetupReadline.test_nested`
+  - File: `<provided file>`, Function: `TestSetupReadline.test_magic_methods`
+
+Extracted parameters:
+
+- `input_0`: first completion input string
+- `expected_0`: first expected completion list
+- `input_1`: second completion input string
+- `expected_1`: second expected completion list
+
+Example parameter rows:
+
+```python
+(
+    "list.Insert",
+    ["list.insert"],
+    "list().Insert",
+    ["list().insert"],
+)
+(
+    "list.__getitem__",
+    ["list.__getitem__"],
+    "list().__getitem__",
+    ["list().__getitem__"],
+)
+```
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests assign a string literal to `s`, then assert that `self.complete(s)` equals an expected list. The structure is the same: one assignment followed by one equality assertion. They differ only in the assigned string and expected completion list.
+
+- Members:
+  - File: `<provided file>`, Function: `TestSetupReadline.test_calls`
+  - File: `<provided file>`, Function: `TestSetupReadline.test_local_import`
+
+Extracted parameters:
+
+- `input_value`: value assigned to `s`
+- `expected`: expected completion list
+
+Example parameter rows:
+
+```python
+("str(bytes", ["str(bytes", "str(BytesWarning"])
+("import test.test_utils", ["import test.test_utils"])
+```
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `TestSetupReadline.test_simple`
+  - File: `<provided file>`, Function: `TestSetupReadline.test_nested`
+  - File: `<provided file>`, Function: `TestSetupReadline.test_magic_methods`
+
+- Apparent similarity:
+  - These tests all check readline completions using `self.complete(...)` and compare the result against expected completion values.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - `test_simple` has three assertions and an assignment, while `test_nested` and `test_magic_methods` each have two assertions.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided file>`, Function: `TestSetupReadline.test_modules`
+  - File: `<provided file>`, Function: `TestSetupReadline.test_preexisting_values`
+  - File: `<provided file>`, Function: `TestSetupReadline.test_colorama`
+
+- Apparent similarity:
+  - These tests all manipulate `self.namespace`, perform completion checks, and clean up namespace values afterward.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different control flow.
+  - Different setup and cleanup structure.
+  - `test_modules` uses `try/finally`.
+  - `test_colorama` uses `try/except/else`.
+  - `test_preexisting_values` has no control-flow block.
+
+- Correct classification:
+  - Type-3 / semantic similarity only.
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<provided file>`, Function: `TestSetupReadline.test_import`
+  - File: `<provided file>`, Function: `TestSetupReadline.test_local_import`
+
+- Apparent similarity:
+  - Both tests exercise import-completion behavior.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - Different complexity of expected-value construction.
+  - `test_import` performs multiple assertions, imports `os`, builds a `goal` set, computes a difference, filters prefixes, and asserts on its length.
+  - `test_local_import` only assigns a string and performs one equality assertion.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test_integration.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different fixtures/signatures
+  - Different number of executable statements
+  - Different control flow
+  - Different call structure
+  - Not safely parametrizable at function level
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_completion`
+  - File: `<input>`, Function: `test_static_analysis`
+
+- Apparent similarity:
+  - Both tests retrieve a skip reason from a case-like object.
+  - Both conditionally call `pytest.skip(skip_reason)`.
+  - Both eventually execute the case using a helper assertion function and `environment`.
+
+- Rejection reason:
+  - Different fixtures/signatures:
+    - `test_completion(case, monkeypatch, environment, has_django)`
+    - `test_static_analysis(static_analysis_case, environment)`
+  - Different number of executable statements.
+  - Different control flow:
+    - `test_completion` has multiple independent `if` blocks, nested conditionals, local helper function definitions, monkeypatching, filesystem changes, and plugin setup logic.
+    - `test_static_analysis` has a single `if/else` branch.
+  - Different call structure:
+    - `case.run(assert_case_equal, environment)`
+    - `static_analysis_case.run(assert_static_analysis, environment)`
+    - `test_completion` also performs `monkeypatch.chdir(...)` and other setup calls.
+  - Not safely parametrizable without adding conditionals or changing behavior.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity only.
+--------------------------------------------------
+Processing: test_debug.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups were found.
+--------------------------------------------------
+Processing: test_cache.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 2
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None. No meaningful clone candidates were identified.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups.
+--------------------------------------------------
+Processing: test_settings.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - One test contains additional inference and validation steps
+  - Not safely parametrizable without changing structure
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `test_base_auto_import_modules`
+  - File: `<provided file>`, Function: `test_auto_import_modules_imports`
+
+- Apparent similarity:
+  - Both tests use the same fixtures: `auto_import_json` and `Script`.
+  - Both create a `Script(...)`, call `.infer()`, unpack one result, and assert that the result’s `_name` is an instance of `CompiledValueName`.
+  - Both are testing behavior related to auto-importing the `json` module.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - `test_base_auto_import_modules` has additional executable structure:
+    - It calls `loads._name.infer()`.
+    - It asserts that `value.parent_context._value` is a `CompiledModule`.
+  - These extra statements make the tests structurally different.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+--------------------------------------------------
+Processing: test_file_io.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 2
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different control flow: one test contains a `for` loop and `if` statement, the other does not
+  - Different call/assert sequence
+  - Not safely parametrizable without changing structure or behavior
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<provided file>`, Function: `test_folder_io_walk`
+  - File: `<provided file>`, Function: `test_folder_io_walk2`
+
+- Apparent similarity:
+  - Both tests initialize `root_dir` using `get_example_dir('namespace_package')`.
+  - Both create an iterator with `FolderIO(root_dir).walk()`.
+  - Both call `next(iterator)` and eventually clear `folder_ios`.
+  - Both assert that `next(iterator, None) is None`.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - Different control flow: `test_folder_io_walk` contains a `for` loop and nested `if`; `test_folder_io_walk2` does not.
+  - Different executable sequence: `test_folder_io_walk` advances the iterator a second time, checks `folder_ios`, checks `root.path`, then clears `folder_ios`; `test_folder_io_walk2` clears `folder_ios` immediately after the first `next(iterator)`.
+  - Not safely parametrizable as Type-2 without adding conditional logic or changing behavior.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+--------------------------------------------------
+Processing: test_inference/test_literals.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different number of executable statements/asserts
+  - Different function call structure
+  - Not safely parametrizable as Type-2 clones
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_f_strings`
+  - File: `<provided test file>`, Function: `test_rb_strings`
+  - File: `<provided test file>`, Function: `test_thousand_separators`
+
+- Apparent similarity:
+  - All three tests consist of repeated `assert` statements comparing the result of `_infer_literal(...)` with an expected literal value.
+  - They all validate literal inference behavior.
+
+- Rejection reason:
+  - Different number of statements/asserts:
+    - `test_f_strings` has 4 asserts.
+    - `test_rb_strings` has 2 asserts.
+    - `test_thousand_separators` has 5 asserts.
+  - Different function call structure:
+    - `test_f_strings` calls `_infer_literal(Script, ..., is_fstring=True)`.
+    - The other tests call `_infer_literal(Script, ...)` without the `is_fstring` keyword argument.
+  - These differences would require structural changes or conditional parametrization to merge safely.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+--------------------------------------------------
+Processing: test_inference/test_buildout_detection.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 1
+- Total number of cloned test functions included in accepted clone classes: 2
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of executable statements.
+  - Different assertion structure.
+  - Different function call structure.
+  - Semantic similarity only, without a shared safely parametrizable syntactic template.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same function signature, no decorators, and the same executable structure:
+  1. Assign a `dedent("""...""")` code snippet to `code`.
+  2. Call `check_module_test(Script, code)` and assign to `paths`.
+  3. Assert `not paths`.
+  4. Assert a specific string is not in `paths`.
+
+  They differ only in the multiline string passed to `dedent` and the string literal checked in the final assertion.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_append_on_non_sys_path`
+  - File: `<provided test file>`, Function: `test_path_from_invalid_sys_path_assignment`
+
+Extracted parameters:
+- `code_snippet`: the multiline code passed to `dedent(...)`
+- `missing_path_value`: the string expected not to be present in `paths`
+
+Possible parameter values:
+
+```python
+pytest.param(
+    """
+    class Dummy(object):
+        path = []
+
+    d = Dummy()
+    d.path.append('foo')
+    """,
+    "foo",
+)
+
+pytest.param(
+    """
+    import sys
+    sys.path = 'invalid'
+    """,
+    "invalid",
+)
+```
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_parent_dir_with_file`
+  - File: `<provided test file>`, Function: `test_buildout_detection`
+
+- Apparent similarity:
+  - Both use `get_example_dir('buildout_project', 'src', 'proj_name')`.
+  - Both test buildout-related path behavior.
+  - Both perform path-related assertions.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different function call structure.
+  - Different assertion structure.
+  - One test calls `_get_parent_dir_with_file(...)`; the other calls `_get_buildout_script_paths(...)`.
+  - `test_buildout_detection` has an extra assignment to `appdir_path`.
+
+- Correct classification:
+  - Type-3 / semantic clone only, not safely parametrizable.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_append_on_non_sys_path`
+  - File: `<provided test file>`, Function: `test_path_from_invalid_sys_path_assignment`
+  - File: `<provided test file>`, Function: `test_path_from_sys_path_assignment`
+
+- Apparent similarity:
+  - All create a code snippet.
+  - All call `check_module_test(Script, code)`.
+  - All assert properties about the resulting `paths`.
+
+- Rejection reason:
+  - `test_append_on_non_sys_path` and `test_path_from_invalid_sys_path_assignment` are a valid Type-2 clone pair, but `test_path_from_sys_path_assignment` cannot be added to that parametrization.
+  - The assertion structure differs:
+    - The accepted pair uses `assert not paths`.
+    - `test_path_from_sys_path_assignment` uses `assert 1 not in paths`.
+  - The final assertion also differs structurally:
+    - The accepted pair checks a string directly against `paths`.
+    - `test_path_from_sys_path_assignment` checks `os.path.abspath(...) in map(str, paths)`.
+  - This would require changing the assertion template or adding conditional logic.
+
+- Correct classification:
+  - Non-parametrizable Type-2 candidate / Type-3 structural difference.
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_sys_path_with_modifications`
+  - File: `<provided test file>`, Function: `test_path_from_sys_path_assignment`
+
+- Apparent similarity:
+  - Both test sys.path/buildout-related path modifications.
+  - Both assert that an absolute buildout egg path is present.
+  - Both use `os.path.abspath(...)`.
+
+- Rejection reason:
+  - Different setup structure:
+    - `test_sys_path_with_modifications` builds a filesystem path using `get_example_dir(...)`.
+    - `test_path_from_sys_path_assignment` builds a large code snippet using `dedent(f"""...""")`.
+  - Different call structure:
+    - One calls `Script(code, path=path)._inference_state.get_sys_path()`.
+    - The other calls `check_module_test(Script, code)`.
+  - Different assertion structure:
+    - One checks membership directly in `paths`.
+    - The other checks membership in `map(str, paths)`.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test_inference/test_annotations.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different decorators
+  - Different function signatures / fixtures
+  - Different assertion structure
+  - Not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_illegal_forward_references`
+  - File: `<input>`, Function: `test_lambda_forward_references`
+
+- Apparent similarity:
+  - Both tests construct a `source` string involving a forward reference annotation.
+  - Both call `Script(source).infer()`.
+  - Both validate inference behavior for annotations expressed as strings.
+
+- Rejection reason:
+  - Different decorators: `test_illegal_forward_references` is already parametrized with `pytest.mark.parametrize`, while `test_lambda_forward_references` is not.
+  - Different function signatures: `test_illegal_forward_references` receives `reference`; `test_lambda_forward_references` does not.
+  - Different assertion structure: one uses `assert not Script(source).infer()`, while the other uses `assert Script(source).infer()`.
+  - Different source construction structure: one formats a string using `% reference`, while the other assigns a fixed literal string.
+
+- Correct classification:
+  - Non-parametrizable structural similarity / semantic clone only.
+--------------------------------------------------
+Processing: test_inference/test_imports.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 37
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 7
+
+Main reasons for rejection:
+
+- Different number of executable statements
+- Different number of asserts
+- Different assertion structures
+- Different function call structures
+- Different attribute access patterns
+- Different fixtures or function signatures
+- Different decorators / parametrization state
+- Semantic similarity without safe structural equivalence
+
+No safely parametrizable Type-1 or Type-2 test-function clone classes were found.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+None.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided file>`, Function: `test_find_module_package`
+- File: `<provided file>`, Function: `test_find_module_not_package`
+
+Apparent similarity:
+
+- Both call `_find_module(...)`.
+- Both unpack `(file_io, is_package)`.
+- Both assert something about the resolved file path.
+- Both assert whether the result is a package.
+
+Rejection reason:
+
+- Different attribute access:
+  - `file_io.path.parts[-2:]`
+  - `file_io.path.name`
+- Different expected-value shape:
+  - tuple of path parts
+  - single filename string
+- Parametrizing this safely would require changing the assertion structure or introducing conditional logic.
+
+Correct classification:
+
+- Non-parametrizable structural similarity / Type-3-like difference.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided file>`, Function: `test_find_module_package_zipped`
+- File: `<provided file>`, Function: `test_find_module_not_package_zipped`
+
+Apparent similarity:
+
+- Both test module discovery inside zip files.
+- Both construct a `sys_path`.
+- Both create a `Script`.
+- Both call `inference_state.compiled_subprocess.get_module_info(...)`.
+- Both assert the resolved file path and package status.
+
+Rejection reason:
+
+- Different number of executable statements.
+- `test_find_module_package_zipped` creates an explicit `Project` variable; the other does not.
+- Different number of asserts.
+- `test_find_module_package_zipped` has extra assertions:
+  - `assert file_io is not None`
+  - `assert file_io._zip_path.name == 'pkg.zip'`
+- Different path setup and different `sys_path` value construction.
+- Not safely parametrizable without conditional assertions.
+
+Correct classification:
+
+- Type-3 / non-parametrizable clone.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<provided file>`, Function: `test_os_issues`
+- File: `<provided file>`, Function: `test_duplicated_import`
+
+Apparent similarity:
+
+- Both define a local helper named `import_names`.
+- Both call `Script(...).complete(...)`.
+- Both assert membership or non-membership of import completion names.
+- Both test import-completion behavior.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different number of assertions.
+- `test_duplicated_import` contains many additional assignment/assertion blocks.
+- The tested import strings and assertion sequence are structurally different.
+- Parametrization would require restructuring the body into loops or conditional expected outcomes.
+
+Correct classification:
+
+- Type-3 / semantic similarity only.
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<provided file>`, Function: `test_import_name_calculation`
+- File: `<provided file>`, Function: `test_pre_defined_imports_module`
+
+Apparent similarity:
+
+- Both create a `Script`.
+- Both retrieve a module context using `_get_module_context()`.
+- Both assert `module.string_names`.
+
+Rejection reason:
+
+- Different fixtures/signatures:
+  - `test_import_name_calculation(Script)`
+  - `test_pre_defined_imports_module(Script, environment, name)`
+- Different decorators:
+  - `test_pre_defined_imports_module` is parametrized.
+  - `test_import_name_calculation` is not.
+- Different number of executable statements.
+- `test_pre_defined_imports_module` has additional assertions about `builtins_module` and `typing_module`.
+- Not safely mergeable without changing decorator/signature structure.
+
+Correct classification:
+
+- Type-3 / non-parametrizable similarity.
+
+---
+
+### Rejected Group 5
+
+Functions:
+
+- File: `<provided file>`, Function: `test_pre_defined_imports_module`
+- File: `<provided file>`, Function: `test_import_needed_modules_by_jedi`
+
+Apparent similarity:
+
+- Both are parametrized over `name` with values related to `"builtins"` and `"typing"`.
+- Both check that Jedi’s internal builtins/typing modules are not confused with user files.
+- Both assert `py__file__()` paths are not equal to a local path.
+
+Rejection reason:
+
+- Different fixtures/signatures:
+  - `test_pre_defined_imports_module(Script, environment, name)`
+  - `test_import_needed_modules_by_jedi(Script, environment, tmpdir, name)`
+- Different body structure:
+  - One directly creates a `Script` from an empty source and calls `_get_module_context()`.
+  - The other creates temporary files, builds a project with `sys_path`, calls `infer()`, and inspects the inferred module.
+- Different number of executable statements.
+- Different call sequence.
+- Semantic similarity only; not a safe Type-2 clone.
+
+Correct classification:
+
+- Semantic clone only / non-parametrizable.
+
+---
+
+### Rejected Group 6
+
+Functions:
+
+- File: `<provided file>`, Function: `test_relative_imports_with_outside_paths`
+- File: `<provided file>`, Function: `test_relative_imports_without_path`
+- File: `<provided file>`, Function: `test_relative_import_out_of_file_system`
+
+Apparent similarity:
+
+- All test relative-import behavior.
+- All construct `Script(...)` instances with relative import source strings.
+- All assert completion or inference results for relative imports.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different number of assertions.
+- Different `Script(...)` call structures:
+  - Some use `path=...`.
+  - Some omit `path`.
+  - Some use `project=...`.
+  - Some do not.
+- Different assertion forms:
+  - equality against completion-name lists
+  - `assert not ...`
+  - tuple unpacking of completions
+- Different tested import levels and source construction.
+- Not safely parametrizable without control flow or conditional assertions.
+
+Correct classification:
+
+- Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 7
+
+Functions:
+
+- File: `<provided file>`, Function: `test_goto_definition_on_import`
+- File: `<provided file>`, Function: `test_named_import`
+- File: `<provided file>`, Function: `test_nested_import`
+- File: `<provided file>`, Function: `test_goto`
+
+Apparent similarity:
+
+- All test import-related inference or navigation behavior.
+- They use `Script(...)`.
+- They call either `.infer()` or `.goto()`.
+- They assert properties of the resulting definitions.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different API methods:
+  - `.infer(...)`
+  - `.goto(...)`
+- Different argument structures.
+- Different assertion structures:
+  - equality against `[]`
+  - `len(...) == 1`
+  - tuple comparison against `(0, 0)`
+  - attribute comparison against `'module'`
+- These are semantically related but structurally different.
+
+Correct classification:
+
+- Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test_inference/test_sys_path.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection:
+  - No parametrizable Type-1 or Type-2 clone candidates were found.
+  - The test functions have different signatures, decorators, statement counts, control flow, assertion counts, and call structures.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected clone candidate groups were identified. The analyzed tests are structurally distinct and do not form safe parametrizable clone groups.
+--------------------------------------------------
+Processing: test_inference/test_namespace_package.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different executable structure
+  - Different control flow
+  - Different number of asserts
+  - Different call sequence / tested API behavior
+  - Not safely parametrizable without changing structure
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_goto_assignment`
+  - File: `<provided test file>`, Function: `test_completions`
+
+- Apparent similarity:
+  - Both functions are already parametrized with structurally similar `pytest.mark.parametrize` decorators.
+  - Both accept the same fixture/parameter signature: `(Script, source, solution)`.
+  - Both use `script_with_path(Script, source)` and compare a resulting description against `"foo = '%s'" % solution`.
+
+- Rejection reason:
+  - Different control flow:
+    - `test_completions` contains a `for` loop and nested `if`.
+    - `test_goto_assignment` has no loop or conditional.
+  - Different number of asserts:
+    - `test_goto_assignment` has two asserts.
+    - `test_completions` has one assert.
+  - Different call sequence:
+    - `test_goto_assignment` calls `.goto()`.
+    - `test_completions` calls `.complete()` and searches through completion results.
+  - Not safely parametrizable as Type-2 without adding conditional logic or changing executable structure.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+--------------------------------------------------
+Processing: test_inference/test_signature.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 10
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different control flow
+  - Different existing `pytest.mark.parametrize` data shape
+  - Not safely parametrizable without changing behavior
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<provided file>`, Function: `test_dataclass_signature`
+  - File: `<provided file>`, Function: `test_attrs_signature`
+
+- Apparent similarity:
+  - Both tests validate inferred constructor signatures for class-decorator-based field generation.
+  - Both are parametrized over `start, start_params`.
+  - Both build similar class body code, call `Script(code).get_signatures()`, and assert parameter names and inferred types.
+
+- Rejection reason:
+  - Different executable statements:
+    - `test_attrs_signature` has additional logic:
+      - `has_attrs = bool(Script('import attrs').infer())`
+      - conditional skip logic using `if not has_attrs`
+    - `test_dataclass_signature` does not have these statements.
+  - Different control flow:
+    - `test_attrs_signature` contains an `if` statement and raises `pytest.skip(...)`.
+  - Different decorators / parametrization shape:
+    - `test_dataclass_signature` has 4 parametrized cases.
+    - `test_attrs_signature` has 5 parametrized cases.
+  - Not safely parametrizable:
+    - Combining them would require additional conditional logic or behavioral changes.
+
+- Correct classification:
+  - Type-3 / semantic clone only, not a safely parametrizable Type-2 clone.
+--------------------------------------------------
+Processing: test_inference/test_docstring.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 33
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 4
+- Total number of cloned test functions included in accepted clone classes: 12
+- Total number of rejected candidate groups: 6
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different function call structure
+  - Different decorators
+  - Different assignment/call sequences
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+#### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test assigns the result of `Script(<code>).infer()` to `defs` and asserts `defs[0].docstring()` equals an expected string. The structure is identical; only the code snippet and expected docstring differ.
+
+- Members:
+  - File: `<input>`, Function: `test_function_doc`
+  - File: `<input>`, Function: `test_instance_doc`
+  - File: `<input>`, Function: `test_docstring_params_formatting`
+
+Extracted parameters:
+- `code`: source snippet passed to `Script(...)`
+- `expected_docstring`: expected value compared against `defs[0].docstring()`
+
+---
+
+#### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test assigns a source snippet to `s`, computes completion names with `[c.name for c in Script(s).complete()]`, and asserts that one expected completion name is present. The body structure is identical; only the source snippet and expected completion string differ.
+
+- Members:
+  - File: `<input>`, Function: `test_docstrings_type_dotted_import`
+  - File: `<input>`, Function: `test_docstrings_param_type`
+  - File: `<input>`, Function: `test_docstrings_type_str`
+
+Extracted parameters:
+- `code`: source snippet assigned to `s`
+- `expected_completion`: expected name asserted to be in `names`
+
+---
+
+#### Clone Class 3
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same `pytest.mark.skipif(numpydoc_unavailable, ...)` decorator, assigns a dedented source snippet to `s`, computes completion names with `jedi.Script(s).complete()`, and performs the same three assertions. Only the source snippet differs.
+
+- Members:
+  - File: `<input>`, Function: `test_numpydoc_parameters_set_of_values`
+  - File: `<input>`, Function: `test_numpydoc_returns`
+  - File: `<input>`, Function: `test_numpydoc_returns_set_of_values`
+  - File: `<input>`, Function: `test_numpydoc_yields`
+
+Extracted parameters:
+- `code`: source snippet passed through `dedent(...)`
+
+---
+
+#### Clone Class 4
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same skip decorator, assign a dedented NumPy snippet to `s`, compute completion names with `jedi.Script(s).complete()`, and assert `'diagonal' in names`. Only the NumPy constructor in the source snippet differs.
+
+- Members:
+  - File: `<input>`, Function: `test_numpy_returns`
+  - File: `<input>`, Function: `test_numpy_comp_returns`
+
+Extracted parameters:
+- `code`: source snippet passed through `dedent(...)`
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_class_doc`
+  - File: `<input>`, Function: `test_class_doc_with_init`
+
+- Apparent similarity:
+  - Both infer a class definition and check the resulting docstring.
+
+- Rejection reason:
+  - Different number of statements
+  - Different number of asserts
+  - Different assertion structure
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<input>`, Function: `test_class_doc_with_init`
+  - File: `<input>`, Function: `test_multiple_docstrings`
+
+- Apparent similarity:
+  - Both unpack a single definition-like result and assert on `d.docstring()`.
+
+- Rejection reason:
+  - Different function call structure: `.infer()` vs `.help()`
+  - Different tested behavior
+  - Not safely parametrizable without changing the call template
+
+- Correct classification:
+  - Semantic clone only / non-parametrizable
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<input>`, Function: `test_numpydoc_parameters`
+  - File: `<input>`, Function: `test_numpydoc_parameters_set_of_values`
+  - File: `<input>`, Function: `test_numpydoc_parameters_set_single_value`
+  - File: `<input>`, Function: `test_numpydoc_parameters_alternative_types`
+  - File: `<input>`, Function: `test_numpydoc_invalid`
+
+- Apparent similarity:
+  - All are `numpydoc` parameter-parsing tests with the same skip decorator and a `dedent(...)` source snippet.
+
+- Rejection reason:
+  - Different number of asserts
+  - Different assertion polarity, e.g. `assert names == []`, `assert not ...`
+  - Different executable structures
+  - Not safely parametrizable as one template
+
+- Correct classification:
+  - Type-3 / semantic clone only
+
+---
+
+#### Rejected Group 4
+
+- Functions:
+  - File: `<input>`, Function: `test_numpydoc_returns_alternative_types`
+  - File: `<input>`, Function: `test_numpydoc_returns_list_of`
+  - File: `<input>`, Function: `test_numpydoc_returns_obj`
+
+- Apparent similarity:
+  - All test NumPy-style return docstring parsing and completion results.
+
+- Rejection reason:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different assignment/call sequence: `test_numpydoc_returns_obj` introduces `script = jedi.Script(s)`
+  - Not safely parametrizable without conditionals or structural changes
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity
+
+---
+
+#### Rejected Group 5
+
+- Functions:
+  - File: `<input>`, Function: `test_decorator`
+  - File: `<input>`, Function: `test_method_decorator`
+
+- Apparent similarity:
+  - Both define decorated callables, infer a symbol with `Script(code).infer()`, and assert on the resulting docstring.
+
+- Rejection reason:
+  - Different function call structure: `d.docstring(raw=True)` vs `d.docstring()`
+  - Different source structure: function decorator case vs method decorator case
+  - Different expected docstring format
+
+- Correct classification:
+  - Type-3 / semantic clone only
+
+---
+
+#### Rejected Group 6
+
+- Functions:
+  - File: `<input>`, Function: `test_completion`
+  - File: `<input>`, Function: `test_numpydoc_invalid`
+
+- Apparent similarity:
+  - Both assert that completion results are empty or falsey.
+
+- Rejection reason:
+  - Different decorators
+  - Different number of statements
+  - Different call structure: direct `Script(...).complete()` vs assigned `s` and `jedi.Script(s).complete()`
+  - Different tested behavior
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable
+--------------------------------------------------
+Processing: test_inference/test_extension.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 4
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different fixtures/function signatures
+  - Different control flow
+  - Different number of executable statements
+  - Different assertion structure
+  - Not safely parametrizable without changing structure or behavior
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_get_signatures_extension`
+  - File: `<provided test file>`, Function: `test_get_signatures_stdlib`
+
+- Apparent similarity:
+  - Both tests create a `Script` instance.
+  - Both call `get_signatures()`.
+  - Both assert that exactly one signature is returned.
+  - Both assert something about the number of parameters in the first signature.
+
+- Rejection reason:
+  - Different fixtures/signatures:
+    - `test_get_signatures_extension(Script, environment)`
+    - `test_get_signatures_stdlib(Script)`
+  - Different control flow:
+    - `test_get_signatures_extension` contains an `if os.name == 'nt'` branch.
+    - `test_get_signatures_stdlib` has no control flow.
+  - Different number of executable statements:
+    - The extension test has an additional `if` statement and variable assignment for `func`.
+  - Different assertion structure:
+    - `assert len(sigs[0].params) in (1, 2)`
+    - `assert len(sigs[0].params) == 1`
+
+- Correct classification:
+  - Rejected: Type-3 / structural difference
+  - Not safely parametrizable as Type-2 without adding conditional logic or changing test structure.
+--------------------------------------------------
+Processing: test_inference/test_pyc.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None — no candidate clone groups were found.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+The only analyzed test function was:
+
+- File: `<input>`, Function: `test_pyc`
+
+Since there is only one test function, no function-level clone class can be formed.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups.
+--------------------------------------------------
+Processing: test_inference/test_representation.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 2
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different executable statement structure
+  - Different number of asserts
+  - Different function/method call sequences
+  - Not safely parametrizable as Type-2
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<input>`, Function: `test_function_execution`
+  - File: `<input>`, Function: `test_class_mro`
+
+- Apparent similarity:
+  - Both tests define a multiline source string.
+  - Both call `get_definition_and_inference_state(Script, s)`.
+  - Both inspect inferred Jedi internals from the returned object.
+
+- Rejection reason:
+  - Different number of executable statements after setup.
+  - Different number of asserts:
+    - `test_function_execution` has two asserts.
+    - `test_class_mro` has one assert.
+  - Different call structure:
+    - `test_function_execution` calls `func.execute_with_values()` twice.
+    - `test_class_mro` calls `cls.py__mro__()` and then inspects `mro`.
+  - Different tested attributes/methods and assertion expressions.
+  - Not safely parametrizable without introducing conditional logic or changing the test structure.
+
+- Correct classification:
+  - Type-3 / semantic similarity only, not a parametrizable Type-2 clone.
+--------------------------------------------------
+Processing: test_inference/test_mixed.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of statements
+  - Different number of asserts
+  - Different control flow
+  - Different decorators / existing parametrization
+  - Different fixtures or function signatures
+  - Similar intent but different executable structure
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_on_code`
+  - File: `<provided test file>`, Function: `test_mixed_module_cache`
+
+- Apparent similarity:
+  - Both create or use a `jedi.Interpreter` instance.
+  - Both call inference-related APIs.
+  - Both assert properties of inferred results.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different call sequence.
+  - Different assertion structure.
+  - `test_mixed_module_cache` performs additional module-cache inspection that is absent from `test_on_code`.
+
+- Correct classification:
+  - Type-3 / structural difference.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_signature`
+  - File: `<provided test file>`, Function: `test_compiled_signature_annotation_string`
+
+- Apparent similarity:
+  - Both define a local function.
+  - Both use `jedi.Interpreter` to inspect signature-related information.
+  - Both assert expected signature or parameter-description output.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - Different function call structure: `.goto()` vs `.get_signatures(1, 5)`.
+  - Different tested attributes: `s.docstring()` vs `s.params[...].description`.
+  - Not safely parametrizable without changing the structure or adding conditional logic.
+
+- Correct classification:
+  - Semantic clone only / non-parametrizable Type-2.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_generics_without_definition`
+  - File: `<provided test file>`, Function: `test_generics_methods`
+
+- Apparent similarity:
+  - Both define generic classes using `TypeVar` and `Generic`.
+  - Both exercise Jedi behavior involving generic typing.
+
+- Rejection reason:
+  - Different decorators: `test_generics_methods` is already parametrized, while `test_generics_without_definition` is not.
+  - Different fixtures/signatures: `test_generics_methods(code, expected, class_findable)` vs `test_generics_without_definition()`.
+  - Different control flow: `test_generics_methods` contains an `if class_findable` branch.
+  - Different assertion structure.
+  - Different executable setup and tested behavior.
+
+- Correct classification:
+  - Semantic clone only / Type-3 structural difference.
+--------------------------------------------------
+Processing: test_inference/test_implicit_namespace_package.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 4
+
+Main reasons for rejection:
+
+- Different number of executable statements.
+- Different assertion structure.
+- Different function/method calls, e.g. `complete()` vs `infer()`.
+- Different accessed attributes, e.g. `c.name` vs `c.full_name`.
+- Extra asserts/statements in otherwise similar setup patterns.
+- Similar test intent but not safely parametrizable without structural changes or dynamic attribute/method selection.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_namespace_package_in_multiple_directories_autocompletion`
+- File: `<provided test file>`, Function: `test_namespace_name_autocompletion_full_name`
+
+Apparent similarity:
+
+- Both define `code`.
+- Both define the same `sys_path`.
+- Both create a `Project`.
+- Both create a `Script`.
+- Both call `script.complete()`.
+- Both assert over a set of completion-derived values.
+
+Rejection reason:
+
+- Different attributes are accessed: `c.name` vs `c.full_name`.
+- Parametrizing this would require dynamic attribute selection such as `getattr(c, attr)`, which is explicitly disallowed.
+- Rejected under rule: different attributes or methods.
+
+Correct classification:
+
+- Non-parametrizable Type-2 candidate / not safely parametrizable.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_implicit_namespace_package_import_autocomplete`
+- File: `<provided test file>`, Function: `test_namespace_package_in_multiple_directories_autocompletion`
+
+Apparent similarity:
+
+- Both test autocomplete behavior.
+- Both create a `Project`.
+- Both create a `Script`.
+- Both call `script.complete()`.
+- Both assert completion names.
+
+Rejection reason:
+
+- Different number of executable statements: one has an additional `sys_path` assignment.
+- Different `Project` construction structure: one uses `Project('.', sys_path=[example_dir])`, the other uses a separately assigned `sys_path`.
+- Different assertion structure: list comparison vs set comparison.
+- Rejected under rules: different number of statements, different assertion structure.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_namespace_package_in_multiple_directories_autocompletion`
+- File: `<provided test file>`, Function: `test_namespace_package_in_multiple_directories_goto_definition`
+
+Apparent similarity:
+
+- Both use the same namespace-package `sys_path` setup.
+- Both create a `Project`.
+- Both create a `Script`.
+- Both operate on `pkg` namespace-package imports.
+
+Rejection reason:
+
+- Different method calls: `script.complete()` vs `script.infer()`.
+- Different assertion structure: one asserts completion names, the other asserts `len(result) == 1`.
+- Different tested operation: autocomplete vs inference/goto-definition.
+- Rejected under rules: different function call structure, different asserts/statements.
+
+Correct classification:
+
+- Semantic clone only / Type-4-like similarity, not parametrizable.
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_implicit_nested_namespace_package`
+- File: `<provided test file>`, Function: `test_namespace_package_in_multiple_directories_goto_definition`
+
+Apparent similarity:
+
+- Both create a `Project`.
+- Both create a `Script`.
+- Both call `infer()`.
+- Both assert that the inference result has length `1`.
+
+Rejection reason:
+
+- Different number of executable statements.
+- `test_implicit_nested_namespace_package` has additional inference call and additional assertions:
+  - `implicit_pkg, = Script(...).infer(column=10)`
+  - `assert implicit_pkg.type == 'namespace'`
+  - `assert implicit_pkg.module_path is None`
+- Different call arguments to `infer()`: one uses `line` and `column`, the other uses no arguments.
+- Rejected under rules: different number of statements, different asserts, different function call structure.
+
+Correct classification:
+
+- Type-3 / structural difference.
+--------------------------------------------------
+Processing: test_inference/test_stdlib.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different decorators / existing parametrization mismatch
+  - Different fixtures or function signatures
+  - Different number of executable statements
+  - Different assert structure or number of asserts
+  - Different call structure
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_namedtuple_str`
+  - File: `<provided test file>`, Function: `test_namedtuple_list`
+
+- Apparent similarity:
+  - Both create a `source` string involving `collections.namedtuple`.
+  - Both call `Script(source).complete()`.
+  - Both collect completion names with `set(r.name for r in result)`.
+  - Both assert against an expected set of completions.
+
+- Rejection reason:
+  - Different decorators: `test_namedtuple_str` is already parametrized; `test_namedtuple_list` is not.
+  - Different function signatures: `test_namedtuple_str(letter, expected, Script)` vs `test_namedtuple_list(Script)`.
+  - Different body structure: `test_namedtuple_str` formats the source with `% letter`; `test_namedtuple_list` does not.
+  - Different expected-value structure: `set(expected)` vs a literal set.
+
+- Correct classification:
+  - Rejected: not safely parametrizable / different decorators and signatures.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_namedtuple_list`
+  - File: `<provided test file>`, Function: `test_nested_namedtuples`
+
+- Apparent similarity:
+  - Both test namedtuple-related completions.
+  - Both build code using `dedent`.
+  - Both call `.complete()` and check that expected completion names are present.
+
+- Rejection reason:
+  - Different number and shape of executable statements.
+  - Different assignment structure: one stores `source`, then `result`, then `completions`; the other directly creates a `Script` object as `s`.
+  - Different assertion structure: full set equality vs membership check in a list comprehension.
+  - Different call structure around `Script` and `dedent`.
+
+- Correct classification:
+  - Rejected: semantic clone only / Type-3 structural difference.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_namedtuple_content`
+  - File: `<provided test file>`, Function: `test_re_sub`
+
+- Apparent similarity:
+  - Both define a nested helper function.
+  - Both call `Script(...).infer()` indirectly through that helper.
+  - Both perform multiple assertions about inferred names.
+
+- Rejection reason:
+  - Different fixtures/signatures: `test_namedtuple_content(Script)` vs `test_re_sub(Script, environment)`.
+  - Different number of assertions: four asserts vs two asserts.
+  - Different helper function body structure: one unpacks a single inference result and returns `x.name`; the other builds a set of names from all inferred definitions.
+  - Different executable statement sequence after the helper definition.
+
+- Correct classification:
+  - Rejected: Type-3 structural difference / not safely parametrizable.
+--------------------------------------------------
+Processing: test_inference/test_compiled.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 13
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 4
+- Main reasons for rejection:
+  - Different fixtures / function signatures
+  - Different number of statements or asserts
+  - Different decorators / parametrization structure
+  - Different call structure
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_simple`
+  - File: `<provided test file>`, Function: `test_doc`
+
+- Apparent similarity:
+  - Both create a compiled/simple object using `compiled.create_simple_object`.
+  - Both access an attribute via `py__getattribute__`.
+  - Both assert something about the resulting object.
+
+- Rejection reason:
+  - Different fixtures / signatures:
+    - `test_simple(inference_state, environment)`
+    - `test_doc(inference_state)`
+  - Different number of executable statements.
+  - Different number of asserts.
+  - Different call structure:
+    - `test_simple` calls `execute_with_values()` and checks result length/name.
+    - `test_doc` calls `py__doc__()` directly.
+
+- Correct classification:
+  - Type-3 / not safely parametrizable.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_builtin_loading`
+  - File: `<provided test file>`, Function: `test_doc`
+
+- Apparent similarity:
+  - Both inspect compiled/builtin-related objects.
+  - Both retrieve an attribute using `py__getattribute__`.
+  - Both check docstring-related behavior.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts:
+    - `test_builtin_loading` has two asserts.
+    - `test_doc` has one assert.
+  - Different object construction/access path:
+    - `inference_state.builtins_module.py__getattribute__('str')`
+    - `compiled.create_simple_object(inference_state, '')`
+  - Not safely parametrizable without changing structure.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_parent_context`
+  - File: `<provided test file>`, Function: `test_qualified_names`
+
+- Apparent similarity:
+  - Both are already parametrized tests.
+  - Both construct a `compiled.CompiledValue` using `DirectObjectAccess`.
+  - Both assert metadata about compiled values.
+
+- Rejection reason:
+  - Different decorators / parametrization structure:
+    - `test_parent_context` parametrizes `attribute, expected_name, expected_parent`.
+    - `test_qualified_names` parametrizes `obj, expected_names`.
+  - Different signatures.
+  - Different body structure:
+    - `test_parent_context` defines an inner class, gets an attribute dynamically, and performs three asserts.
+    - `test_qualified_names` directly wraps `obj` and performs one assert.
+  - Different number of statements and asserts.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+#### Rejected Group 4
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_dict_values`
+  - File: `<provided test file>`, Function: `test_getitem_on_none`
+
+- Apparent similarity:
+  - Both create or use a `Script` object with a string snippet.
+  - Both call `.infer()`.
+  - Both relate to inference behavior for unusual indexing/subscript expressions.
+
+- Rejection reason:
+  - Different fixtures / signatures:
+    - `test_dict_values(Script, environment)`
+    - `test_getitem_on_none(Script)`
+  - Different number of executable statements.
+  - Different number of asserts.
+  - Different call structure:
+    - `test_dict_values` directly asserts truthiness of `Script(...).infer()`.
+    - `test_getitem_on_none` stores `script`, asserts no inference result, inspects `_inference_state.analysis`, and asserts issue name.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+--------------------------------------------------
+Processing: test_inference/test_fstring.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None; no candidate clone groups were found.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups found.
+--------------------------------------------------
+Processing: test_inference/test_precedence.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None; no candidate clone groups were found.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups were found.
+--------------------------------------------------
+Processing: test_inference/test_context.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 2
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different fixtures/signatures
+  - Different number of statements
+  - Different number of asserts
+  - Different function call structures
+  - Semantic similarity only; not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<provided input>`, Function: `test_module_attributes`
+  - File: `<provided input>`, Function: `test_module__file__`
+
+- Apparent similarity:
+  - Both tests exercise module-level dunder attributes through the `Script` fixture.
+  - Both call `.infer()` and assert properties of inferred values.
+
+- Rejection reason:
+  - Different fixtures/signatures:
+    - `test_module_attributes(Script)`
+    - `test_module__file__(Script, environment)`
+  - Different number of executable statements.
+  - Different number of asserts.
+  - Different call structures:
+    - `Script('__name__').complete()`
+    - `Script('__file__').infer()`
+    - `Script('__file__', path='example.py').infer()`
+    - `Script('import antigravity; antigravity.__file__').infer()`
+  - The tests validate related behavior but do not share the same structural template.
+
+- Correct classification:
+  - Semantic clone only / non-parametrizable.
+--------------------------------------------------
+Processing: test_inference/test_gradual/test_conversion.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of statements
+  - Different number of asserts
+  - Different function call structure
+  - Different executable call sequences
+  - Structural similarity only in small portions of the tests, not the full test body
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_conversion_of_stub_only`
+  - File: `<input>`, Function: `test_goto_on_file`
+
+- Apparent similarity:
+  - Both create a `Project` using the same `stub_folder`.
+  - Both create a `Script` involving `stub_only`.
+  - Both perform an initial `.goto()`.
+  - Both later create another `Script` using `path=d1.module_path` and call `.goto(...)` with line/column information.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - Different call sequence: `test_goto_on_file` performs `_name.infer()` and `py__mro__()`, while `test_conversion_of_stub_only` does not.
+  - Different assertion structure and checked attributes.
+  - Not safely parametrizable without changing structure.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<input>`, Function: `test_goto_import`
+  - File: `<input>`, Function: `test_stub_get_line_code`
+
+- Apparent similarity:
+  - Both use the same code string: `'from abc import ABC; ABC'`.
+  - Both call `.goto(only_stubs=True)`.
+  - Both assert that the resulting definition is a stub or is associated with stub behavior.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - `test_stub_get_line_code` creates a `script` variable, calls `get_line_code()`, deletes an entry from `parser_cache`, performs a second path-based `Script(...).goto(...)`, and checks line code again.
+  - `test_goto_import` performs a second `.goto()` without `only_stubs=True` and asserts `not d.is_stub()`.
+  - Different executable paths and call sequences.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<input>`, Function: `test_goto_import`
+  - File: `<input>`, Function: `test_os_stat_result`
+
+- Apparent similarity:
+  - Both create a `Script(...)`.
+  - Both call `.goto()`.
+  - Both assert stub-related behavior using `d.is_stub()`.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - `test_goto_import` performs two `.goto()` calls, one with `only_stubs=True` and one without.
+  - `test_os_stat_result` performs an additional assignment `n = d._name` and checks `convert_names([n]) == [n]`.
+  - Different call structure and tested behavior.
+
+- Correct classification:
+  - Type-3 / semantic similarity only.
+--------------------------------------------------
+Processing: test_inference/test_gradual/test_stubs.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None. Only one pytest test function was present, so no clone candidates exist.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups. Only one test function was analyzed:
+
+- File: `<provided file>`, Function: `test_infer_and_goto`
+--------------------------------------------------
+Processing: test_inference/test_gradual/test_typeshed.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 18
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 1
+- Total number of cloned test functions included in accepted clone classes: 2
+- Total number of rejected candidate groups: 5
+
+Main reasons for rejection:
+
+- Different number of executable statements
+- Different number of asserts
+- Different assertion structure, e.g. assert message present vs absent
+- Different control flow, especially extra `try/except/else`
+- Semantic similarity only, but not safely parametrizable
+- Whole test bodies were not structurally equivalent even if smaller internal fragments looked similar
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same top-level function signature, no decorators, and identical executable structure:
+  1. Infer one definition from `Script(...).infer()`
+  2. Extract `def_._name._value`
+  3. Assert that the value is an instance of an expected value class, using the same assertion message structure
+
+- Members:
+  - File: `<provided file>`, Function: `test_class`
+  - File: `<provided file>`, Function: `test_class_function`
+
+Extracted parameters:
+
+- `code`: the source string passed to `Script`
+  - `'import threading; threading.Thread'`
+  - `'import threading; threading.Thread.getName'`
+
+- `expected_value_type`: expected class used in `isinstance`
+  - `ClassValue`
+  - `MethodValue`
+
+Parametrization template:
+
+```python
+@pytest.mark.parametrize(
+    "code, expected_value_type",
+    [
+        ("import threading; threading.Thread", ClassValue),
+        ("import threading; threading.Thread.getName", MethodValue),
+    ],
+)
+def test_class_like_values(Script, code, expected_value_type):
+    def_, = Script(code).infer()
+    value = def_._name._value
+    assert isinstance(value, expected_value_type), value
+```
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `test_class`
+  - File: `<provided file>`, Function: `test_instance`
+  - File: `<provided file>`, Function: `test_class_function`
+
+- Apparent similarity:
+  - All three infer a value from `Script(...).infer()`
+  - All three assign `value = def_._name._value`
+  - All three assert `isinstance(value, ...)`
+
+- Rejection reason:
+  - Different assertion structure
+  - `test_class` and `test_class_function` use an assertion message: `assert isinstance(...), value`
+  - `test_instance` does not use an assertion message: `assert isinstance(...)`
+  - This is a structural difference in the assert statement
+
+- Correct classification:
+  - Non-parametrizable Type-2 as a three-function group
+  - Accepted subset: `test_class` and `test_class_function`
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided file>`, Function: `test_function`
+  - File: `<provided file>`, Function: `test_class`
+  - File: `<provided file>`, Function: `test_instance`
+  - File: `<provided file>`, Function: `test_class_function`
+
+- Apparent similarity:
+  - These tests all perform inference using `Script(...).infer()`
+  - They inspect `def_._name._value`
+  - They assert that the inferred value has a particular Jedi internal value type
+
+- Rejection reason:
+  - Different number of executable statements
+  - Different number of asserts
+  - `test_function` contains multiple independent inference/assertion blocks
+  - The other tests contain only one inference/assertion block
+  - Whole test bodies are not structurally equivalent
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<provided file>`, Function: `test_module_exists_only_as_stub`
+  - File: `<provided file>`, Function: `test_django_exists_only_as_stub`
+
+- Apparent similarity:
+  - Both tests check behavior for third-party modules that should exist only as stubs
+  - Both contain a `try/except ImportError/else pytest.skip(...)` structure
+  - Both end by asserting that `Script('import ...').infer()` returns no inference result
+
+- Rejection reason:
+  - Different number of executable statements
+  - Different number of asserts
+  - `test_module_exists_only_as_stub` has additional logic:
+    - Assigns `redis_path`
+    - Asserts `os.path.isdir(redis_path)`
+  - `test_django_exists_only_as_stub` does not have the corresponding assignment or assert
+
+- Correct classification:
+  - Type-3 structural similarity / non-parametrizable clone
+
+---
+
+### Rejected Group 4
+
+- Functions:
+  - File: `<provided file>`, Function: `test_math`
+  - File: `<provided file>`, Function: `test_type_var`
+
+- Apparent similarity:
+  - Both infer from a `Script(...)`
+  - Both assert `def_.name == ...`
+
+- Rejection reason:
+  - Different number of executable statements
+  - Different assertion structure after the first assertion
+  - `test_math` assigns `value = def_._name._value` and asserts `assert value`
+  - `test_type_var` instead asserts `def_.description == 'class TypeVar'`
+  - The final validation logic is structurally different
+
+- Correct classification:
+  - Type-3 / not safely parametrizable
+
+---
+
+### Rejected Group 5
+
+- Functions:
+  - File: `<provided file>`, Function: `test_math_is_stub`
+  - File: `<provided file>`, Function: `test_goto_stubs`
+
+- Apparent similarity:
+  - Both tests inspect stubs and use `goto(only_stubs=True)`
+  - Both check `is_stub()` behavior
+  - Both operate on inferred definitions from `Script(...)`
+
+- Rejection reason:
+  - Different decorators
+  - `test_math_is_stub` is already parametrized
+  - `test_goto_stubs` is not parametrized
+  - Different number of executable statements
+  - Different assert sequences
+  - Different call flow: `test_math_is_stub` performs both `infer()` and `goto()` checks with repeated assertions, while `test_goto_stubs` performs a shorter stub lookup sequence
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable as Type-2
+--------------------------------------------------
+Processing: test_inference/test_gradual/test_stub_loading.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 2
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different method calls: `.infer()` vs `.help()`
+  - Different assignment structure: normal assignment vs tuple unpacking assignment
+  - Different assertion expression structure: list comprehension over `defs` vs method call `d.docstring()`
+  - Existing parametrized tests are not structurally equivalent in body
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<provided file>`, Function: `test_find_stubs_infer`
+  - File: `<provided file>`, Function: `test_docstrings`
+
+- Apparent similarity:
+  - Both are top-level pytest test functions.
+  - Both use the same fixture/signature pattern: `ScriptInStubFolder, code, expected`.
+  - Both are already parametrized with `pytest.mark.parametrize(('code', 'expected'), ...)`.
+  - Both execute `ScriptInStubFolder(code)` and compare a result to `expected`.
+
+- Rejection reason:
+  - Different function call structure: `.infer()` vs `.help()`.
+  - Different assignment structure:
+    - `defs = ScriptInStubFolder(code).infer()`
+    - `d, = ScriptInStubFolder(code).help()`
+  - Different assertion structure:
+    - `assert [d.name for d in defs] == expected`
+    - `assert d.docstring() == expected`
+  - Different attributes/methods would require dynamic behavior or conditional logic to merge safely.
+  - Existing parametrized tests are not structurally equivalent in their bodies.
+
+- Correct classification:
+  - Rejected: Type-3 / non-parametrizable structural similarity.
+--------------------------------------------------
+Processing: test_parso_integration/test_parser_utils.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 2
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different control flow
+  - Different function call structure
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `TestCallAndName.test_call_type`
+  - File: `<provided test file>`, Function: `TestCallAndName.test_literal_type`
+
+- Apparent similarity:
+  - Both methods use `self.get_call(...)`.
+  - Both assert the returned node type using `isinstance(...)`.
+  - Both are methods in the same test class.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - `test_literal_type` repeats the literal parsing/assertion pattern multiple times and additionally calls `parser_utils.safe_literal_eval(...)`.
+  - The call inputs and expected node/value checks are not just simple parameter differences over the same body structure.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_hex_values_in_docstring`
+  - File: `<provided test file>`, Function: `test_get_signature`
+
+- Apparent similarity:
+  - Both parse Python source code using `parse(...)`.
+  - Both call a `parser_utils` helper.
+  - Both assert the helper result equals an expected value.
+
+- Rejection reason:
+  - Different decorators: `test_get_signature` is already parametrized, while `test_hex_values_in_docstring` is not.
+  - Different function signatures: `test_get_signature(code, signature)` has parameters, while `test_hex_values_in_docstring()` does not.
+  - Different control flow: `test_get_signature` contains an `if` statement; `test_hex_values_in_docstring` does not.
+  - Different call structure and tested helper functions: `clean_scope_docstring(...)` vs `get_signature(...)`.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test_parso_integration/test_basic.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 2
+- Main reasons for rejection:
+  - Different function call structure
+  - Different fixtures/signatures
+  - Different attributes or methods
+  - Different executable statement/assert structures
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<input>`, Function: `test_if`
+  - File: `<input>`, Function: `test_class_and_if`
+- Apparent similarity:
+  - Both tests assign a `src` value using `dedent(...)`.
+  - Both call `check_p(src)`.
+  - Both assert that inferred names from `Script(src).infer(...)` equal `['int']`.
+- Rejection reason:
+  - Different function call structure.
+  - `test_if` calls `Script(src).infer(8, 6)`.
+  - `test_class_and_if` calls `Script(src).infer()` with no arguments.
+  - Parametrizing this safely would require changing the call shape or introducing conditional argument handling.
+- Correct classification:
+  - Non-parametrizable Type-2 / Type-3 structural difference.
+
+Rejected Group 2:
+- Functions:
+  - File: `<input>`, Function: `test_tokenizer_with_string_literal_backslash`
+  - File: `<input>`, Function: `test_ellipsis_without_getitem`
+- Apparent similarity:
+  - Both tests call `Script(...).infer()`.
+  - Both store the inference result in a variable.
+  - Both assert a property of the inferred result against an expected string literal.
+- Rejection reason:
+  - Different fixtures/signatures:
+    - `test_tokenizer_with_string_literal_backslash(Script)`
+    - `test_ellipsis_without_getitem(Script, environment)`
+  - Different assignment/unpacking structure:
+    - `c = Script(...).infer()`
+    - `def_, = Script(...).infer()`
+  - Different attribute/method access structure:
+    - `c[0]._name._value.get_safe_value()`
+    - `def_.name`
+- Correct classification:
+  - Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test_parso_integration/test_error_correction.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 4
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 2
+- Main reasons for rejection:
+  - Different executable statement/assert structures
+  - Different function call structures
+  - Different assertion expressions and call sequences
+  - Not safely parametrizable without changing behavior or adding conditional logic
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_string_literals`
+  - File: `<input>`, Function: `test_decorator_string_issue`
+
+- Apparent similarity:
+  - Both define a multiline `source` using `dedent(...)`.
+  - Both construct a `Script` object from the source.
+  - Both contain two assertions involving parsing/completion behavior.
+
+- Rejection reason:
+  - Different function call structure:
+    - `test_string_literals` uses `Script(dedent(source))`.
+    - `test_decorator_string_issue` uses `Script(source)`.
+  - Different assertion structures:
+    - `test_string_literals` checks `tree_node.end_pos == (6, 0)` and `not script.complete()`.
+    - `test_decorator_string_issue` checks `s.complete()` and `tree_node.get_code() == source`.
+  - The assertions occur in a different semantic pattern and cannot be unified by substituting only literals or simple values.
+
+- Correct classification:
+  - Type-3 / semantic clone only; not safely parametrizable Type-2.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<input>`, Function: `test_string_literals`
+  - File: `<input>`, Function: `test_incomplete_function`
+
+- Apparent similarity:
+  - Both assign a `source` string.
+  - Both create a `Script` object using `Script(dedent(source))`.
+  - Both call `script.complete()` in an assertion.
+
+- Rejection reason:
+  - Different number of executable statements:
+    - `test_string_literals` has two assertions.
+    - `test_incomplete_function` has one assertion.
+  - Different number of asserts.
+  - Different call structure:
+    - `test_string_literals` calls `script.complete()` with no arguments and negates it.
+    - `test_incomplete_function` calls `script.complete(1, 3)` with positional arguments.
+
+- Correct classification:
+  - Type-3 / non-parametrizable similarity; not safely parametrizable Type-2.
+--------------------------------------------------
+Processing: test_api/test_classes.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 37
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 6
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different assert structures or different number of asserts
+  - Different function call structure
+  - Different decorators / parametrization shapes
+  - Similar intent but structurally different implementation
+  - Not safely parametrizable without changing structure or adding conditional logic
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_function_signature_in_doc`
+  - File: `<input>`, Function: `test_class_signature`
+
+- Apparent similarity:
+  - Both create a `Script` from source code.
+  - Both call `.infer()`.
+  - Both obtain a docstring from the first inferred definition.
+  - Both assert something about the resulting signature string.
+
+- Rejection reason:
+  - Different assert structure.
+  - `test_function_signature_in_doc` uses containment:  
+    `assert "..." in str(doc)`
+  - `test_class_signature` uses equality:  
+    `assert doc == "..."`
+  - One test wraps `doc` in `str(...)`; the other does not.
+
+- Correct classification:
+  - Type-3 / semantic clone only, not safely parametrizable Type-2.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<input>`, Function: `test_completion_params`
+  - File: `<input>`, Function: `test_hashlib_params`
+
+- Apparent similarity:
+  - Both test completion signatures.
+  - Both assert the names of signature parameters.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - `test_completion_params` directly indexes into `complete()` and `get_signatures()`.
+  - `test_hashlib_params` introduces intermediate variables `script`, `c`, and `sig`.
+  - The call sequence is structurally different.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<input>`, Function: `test_goto_named_params`
+  - File: `<input>`, Function: `test_class_call`
+
+- Apparent similarity:
+  - Both use `get_names(...)` to obtain a name reference.
+  - Both call `.goto()` on that reference.
+  - Both assert that the resulting definition has type `'param'`.
+
+- Rejection reason:
+  - Different statement/assert structure.
+  - `test_goto_named_params` asserts `(param.line, param.column) == (1, 13)`.
+  - `test_class_call` asserts `param_def.name == 'group'`.
+  - The setup call differs: one uses `get_names(dedent(src), ...)`, the other uses `get_names(src, ...)`.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+#### Rejected Group 4
+
+- Functions:
+  - File: `<input>`, Function: `test_import`
+  - File: `<input>`, Function: `test_import_alias`
+
+- Apparent similarity:
+  - Both test `get_names(..., references=True)` on import statements.
+  - Both assert names and types of imported modules/functions.
+  - Both call `.goto()` on returned names.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different assert count.
+  - `test_import_alias` checks alias-specific internals such as `_name.tree_name.parent.type`.
+  - `test_import` checks multiple different import forms and module-resolution behavior.
+  - The tests share an import/goto theme but do not preserve a single structural template.
+
+- Correct classification:
+  - Semantic clone only / Type-3, not parametrizable Type-2.
+
+---
+
+#### Rejected Group 5
+
+- Functions:
+  - File: `<input>`, Function: `test_is_definition`
+  - File: `<input>`, Function: `test_is_definition_import`
+
+- Apparent similarity:
+  - Both are already parametrized.
+  - Both call `get_names(...)`.
+  - Both assert whether returned names are definitions.
+
+- Rejection reason:
+  - Different decorators / parametrization shapes.
+  - Different function signatures.
+  - Different body structure.
+  - `test_is_definition` indexes one result and asserts `.name` and `.is_definition()`.
+  - `test_is_definition_import` sorts all names and asserts a list of `.is_definition()` values.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+#### Rejected Group 6
+
+- Functions:
+  - File: `<input>`, Function: `test_position_none_if_builtin`
+  - File: `<input>`, Function: `test_builtin_module_with_path`
+
+- Apparent similarity:
+  - Both inspect definitions from built-in or compiled modules.
+  - Both assert builtin-module related behavior.
+  - Both check `line` and `column` values.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different assert count.
+  - Different call chains: `.goto()` vs `.infer()`.
+  - Different expected values: `line/column is not None` vs `line/column is None`.
+  - `test_builtin_module_with_path` includes additional assertions on `_name`, `module_path`, and `name`.
+
+- Correct classification:
+  - Semantic clone only / Type-3, not safely parametrizable.
+--------------------------------------------------
+Processing: test_api/test_refactoring.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 5
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 2
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of assertions
+  - Different control flow
+  - Different function call structure
+  - Different fixtures/signatures
+  - Different decorators
+  - Semantic similarity without safe parametrizable structure
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_rename_mod`
+  - File: `<provided test file>`, Function: `test_namespace_package`
+
+- Apparent similarity:
+  - Both tests exercise `Script(...).rename(...)`.
+  - Both call `refactoring.apply()`.
+  - Both verify renamed filesystem paths.
+  - Both assert changed files and generated diffs.
+
+- Rejection reason:
+  - Different fixtures/signatures:
+    - `test_rename_mod(Script, dir_with_content)`
+    - `test_namespace_package(Script, tmpdir)`
+  - Different decorators:
+    - `test_namespace_package` has `@pytest.mark.skipif(...)`
+    - `test_rename_mod` has no decorator
+  - Different number and structure of executable statements.
+  - Different assertion structure and number of assertions.
+  - Different filesystem setup logic.
+  - Not safely parametrizable without adding conditional logic or restructuring.
+
+- Correct classification:
+  - Type-3 / semantic clone, not a parametrizable Type-2 clone.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_diff_without_ending_newline`
+  - File: `<provided test file>`, Function: `test_diff_path_outside_of_project`
+
+- Apparent similarity:
+  - Both tests validate the output of `get_diff()`.
+  - Both compare the resulting diff to a `dedent(...)` expected string.
+  - Both use `Script(...).rename(...)`.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different control flow:
+    - `test_diff_path_outside_of_project` contains an `if/else` platform branch.
+    - `test_diff_without_ending_newline` has no control flow.
+  - Different call structure:
+    - One stores `refactoring = Script(...).rename(...)` and later calls `refactoring.get_diff()`.
+    - The other creates `script = Script(...)`, then chains `script.rename(...).get_diff()`.
+  - Different use of constructor arguments:
+    - One uses positional arguments.
+    - The other uses keyword arguments including `code`, `path`, and `project`.
+  - Not safely parametrizable without introducing conditionals or altering structure.
+
+- Correct classification:
+  - Type-3 / semantic clone, not a parametrizable Type-2 clone.
+--------------------------------------------------
+Processing: test_api/test_call_signatures.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 41
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 2
+- Total number of cloned test functions included in accepted clone classes: 4
+- Total number of rejected candidate groups: 9
+- Main reasons for rejection:
+  - Different number of executable statements or asserts
+  - Different helper-call argument structure, e.g. positional vs keyword arguments
+  - Different executable structure, e.g. assignment + assert vs single assert
+  - Different decorators / existing parametrization incompatibility
+  - Semantic similarity without identical parametrizable structure
+  - Different call sequences or extra validation asserts
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests consist of exactly one executable statement: a call to `assert_signature` with the same positional argument structure. They differ only in the source string literal.
+
+Members:
+
+- File: `<provided>`, Function: `test_additional_brackets`
+- File: `<provided>`, Function: `test_unterminated_strings`
+
+Extracted parameters:
+
+- `source`: input source string passed to `assert_signature`
+  - `'abs(('`
+  - `'abs(";'`
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same two-statement structure:
+  1. Assign one signature from `Script(CLASS_CODE + <literal>).get_signatures()`
+  2. Assert the parameter-name list equals an expected list
+
+  They differ only in the call suffix string and the expected parameter-name list.
+
+Members:
+
+- File: `<provided>`, Function: `test_call_init_on_class`
+- File: `<provided>`, Function: `test_call_init_on_instance`
+
+Extracted parameters:
+
+- `call_suffix`: source suffix appended to `CLASS_CODE`
+  - `'X.__init__('`
+  - `'X().__init__('`
+- `expected_param_names`: expected parameter names
+  - `['self', 'foo', 'bar']`
+  - `['foo', 'bar']`
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided>`, Function: `test_valid_call`
+- File: `<provided>`, Function: `test_additional_brackets`
+- File: `<provided>`, Function: `test_unterminated_strings`
+
+Apparent similarity:
+
+- Each test is a single call to the helper `assert_signature`.
+
+Rejection reason:
+
+- Different function call structure.
+- `test_valid_call` uses `assert_signature(Script, 'bool()', 'bool', column=5)`.
+- The others use `assert_signature(Script, <source>, 'abs', 0)`.
+- The number of positional arguments and keyword argument usage differ.
+
+Correct classification:
+
+- Non-parametrizable Type-2 superset.
+- A safe Type-2 subset was accepted separately: `test_additional_brackets` and `test_unterminated_strings`.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided>`, Function: `test_whitespace_before_bracket`
+- File: `<provided>`, Function: `test_brackets_in_string_literals`
+- File: `<provided>`, Function: `test_function_definitions_should_break`
+
+Apparent similarity:
+
+- These tests all exercise signature detection around unusual bracket/string/function-definition syntax and use `assert_signature`.
+
+Rejection reason:
+
+- Different number of statements.
+- Different number of asserts.
+- `test_function_definitions_should_break` includes an additional `assert not Script(...).get_signatures()` statement.
+- `test_whitespace_before_bracket` has three `assert_signature` calls.
+- `test_brackets_in_string_literals` has two `assert_signature` calls.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<provided>`, Function: `test_get_signatures_empty_parentheses_pre_space`
+- File: `<provided>`, Function: `test_get_signatures_whitespace`
+
+Apparent similarity:
+
+- Both assign a source string to a variable and then call `assert_signature` with `line` and `column` keyword arguments.
+
+Rejection reason:
+
+- Assignment RHS structure differs:
+  - One uses `dedent("""...""")`.
+  - The other uses a direct string literal.
+- This is not a pure literal-only difference under the same syntactic template.
+
+Correct classification:
+
+- Non-parametrizable Type-2 / not safely parametrizable.
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<provided>`, Function: `test_chained_calls`
+- File: `<provided>`, Function: `test_return`
+
+Apparent similarity:
+
+- Both assign `source = dedent(...)` and then call `assert_signature`.
+
+Rejection reason:
+
+- Different function call structure.
+- `test_chained_calls` calls `assert_signature(Script, source, 'test2', 0)`.
+- `test_return` calls `assert_signature(Script, source, 'join', 0, column=len(...))`.
+- The second test has an additional keyword argument.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 5
+
+Functions:
+
+- File: `<provided>`, Function: `test_class_creation`
+- File: `<provided>`, Function: `test_call_init_on_class`
+- File: `<provided>`, Function: `test_call_init_on_instance`
+
+Apparent similarity:
+
+- These tests all inspect signatures involving `CLASS_CODE` and assert parameter names.
+
+Rejection reason:
+
+- Different number of asserts.
+- `test_class_creation` additionally asserts `sig.index == 0` and `sig.name == 'X'`.
+- The `test_call_init_on_*` tests only assert parameter names.
+
+Correct classification:
+
+- Type-3 / structural difference.
+- The safe subset `test_call_init_on_class` and `test_call_init_on_instance` was accepted separately.
+
+---
+
+### Rejected Group 6
+
+Functions:
+
+- File: `<provided>`, Function: `test_lambda_params`
+- File: `<provided>`, Function: `test_class_creation`
+- File: `<provided>`, Function: `test_call_magic_method`
+
+Apparent similarity:
+
+- These tests inspect a signature object and assert properties such as `index`, `name`, and parameter names.
+
+Rejection reason:
+
+- Different number of statements.
+- Different call sequences.
+- `test_lambda_params` defines local source code, calls `get_signatures(column=11)`, and performs three asserts.
+- `test_class_creation` uses `CLASS_CODE + 'X('` and performs three asserts.
+- `test_call_magic_method` contains multiple signature lookups and additional asserts.
+
+Correct classification:
+
+- Semantic clone only / Type-3 structural difference.
+
+---
+
+### Rejected Group 7
+
+Functions:
+
+- File: `<provided>`, Function: `test_flow_call`
+- File: `<provided>`, Function: `test_in_function`
+
+Apparent similarity:
+
+- Both assert that no signatures are returned for incomplete or invalid source constructs.
+
+Rejection reason:
+
+- Different number of statements.
+- `test_flow_call` is a single assertion.
+- `test_in_function` first assigns `code = dedent(...)` and then asserts on `Script(code).get_signatures()`.
+
+Correct classification:
+
+- Semantic clone only / not safely parametrizable.
+
+---
+
+### Rejected Group 8
+
+Functions:
+
+- File: `<provided>`, Function: `test_find_signature_on_module`
+- File: `<provided>`, Function: `test_no_signature`
+
+Apparent similarity:
+
+- Both check cases where `get_signatures()` returns an empty list.
+
+Rejection reason:
+
+- Different number of statements and asserts.
+- `test_no_signature` contains multiple independent source snippets and multiple assertions.
+- `test_find_signature_on_module` contains one assignment and one assertion.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 9
+
+Functions:
+
+- File: `<provided>`, Function: `TestSignatures.test_simple`
+- File: `<provided>`, Function: `TestSignatures.test_more_complicated`
+
+Apparent similarity:
+
+- Both methods define `run = self._run_simple`, assign source snippets, and make repeated `run(...)` calls.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different number of helper calls.
+- Different call sequences.
+- Different source-variable assignment pattern.
+
+Correct classification:
+
+- Type-3 / structural difference.
+--------------------------------------------------
+Processing: test_api/test_keyword.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 4
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different fixtures/signatures
+  - Different number of executable statements
+  - Different number of asserts
+  - Semantic/API similarity only, not a safely parametrizable structural clone
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<provided file>`, Function: `test_keyword_attributes`
+  - File: `<provided file>`, Function: `test_none_keyword`
+
+- Apparent similarity:
+  - Both tests call `Script(<keyword>).complete()`.
+  - Both unpack a single completion result.
+  - Both assert properties of keyword completion objects.
+
+- Rejection reason:
+  - Different fixtures/signatures:
+    - `test_keyword_attributes(Script)`
+    - `test_none_keyword(Script, environment)`
+  - Different number of executable statements.
+  - Different number of asserts:
+    - `test_keyword_attributes` contains many attribute assertions.
+    - `test_none_keyword` contains only two assertions.
+  - Not safely parametrizable without changing structure or omitting/adding assertions.
+
+- Correct classification:
+  - Type-3 / semantic clone only; not a parametrizable Type-2 clone.
+--------------------------------------------------
+Processing: test_api/test_completion.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- **Total number of test functions analyzed:** 26
+- **Total number of parametrizable Type-1 clone classes:** 0
+- **Total number of parametrizable Type-2 clone classes:** 0
+- **Total number of cloned test functions included in accepted clone classes:** 0
+- **Total number of rejected candidate groups:** 8
+
+### Main reasons for rejection
+
+- Different number of executable statements.
+- Different number of asserts.
+- Different call structures, especially different `complete()` keyword arguments.
+- Different fixtures/signatures.
+- Different decorators / existing parametrization shapes.
+- Different assertion structures, e.g. `assert x` vs `assert not x`.
+- Similar testing intent but structurally different implementations.
+
+No safely parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_file_path_should_have_completions`
+  - File: `<provided test file>`, Function: `test_with_stmt_error_recovery`
+  - File: `<provided test file>`, Function: `test_dict_keys_in_weird_case`
+  - File: `<provided test file>`, Function: `test_generator`
+
+- Apparent similarity:
+  - These tests all check that `Script(...).complete(...)` returns a truthy/non-empty result.
+
+- Rejection reason:
+  - Different number of statements.
+    - `test_generator` has an assignment before the assert.
+  - Different function call structures.
+    - Some calls use no arguments to `complete()`.
+    - Some use `line=...`.
+    - Some use both `line=...` and `column=...`.
+  - Not safely parametrizable without changing call structure.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_empty_init`
+  - File: `<provided test file>`, Function: `test_in_comment_before_string`
+
+- Apparent similarity:
+  - Both assert that completion returns no results using `assert not Script(...).complete(...)`.
+
+- Rejection reason:
+  - Different number of statements.
+    - `test_empty_init` first assigns `code = dedent(...)`.
+    - `test_in_comment_before_string` directly passes the string to `Script(...)`.
+  - Different call structure.
+    - `test_empty_init` calls `.complete()` with no arguments.
+    - `test_in_comment_before_string` calls `.complete(line=1)`.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_os_nowait`
+  - File: `<provided test file>`, Function: `test_whitespace_at_end_after_dot`
+
+- Apparent similarity:
+  - Both check that an expected completion name is present in a list of completion names.
+
+- Rejection reason:
+  - Different number of statements.
+    - `test_os_nowait` assigns the completion result to `s` before asserting.
+    - `test_whitespace_at_end_after_dot` performs the call inline inside the assertion.
+  - Different expression structure in the assertion.
+  - Not safely parametrizable without rewriting one body.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 4
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_keyword_value`
+  - File: `<provided test file>`, Function: `test_async`
+
+- Apparent similarity:
+  - Both collect completion names and assert that expected names are present.
+
+- Rejection reason:
+  - Different fixtures/signatures.
+    - `test_keyword_value(Script)`
+    - `test_async(Script, environment)`
+  - Different number of statements.
+  - Different setup structure.
+    - `test_keyword_value` defines a local helper function.
+    - `test_async` uses a `dedent(...)` code block and direct completion call.
+  - Different executable structure.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 5
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_in_whitespace`
+  - File: `<provided test file>`, Function: `test_empty_init`
+  - File: `<provided test file>`, Function: `test_in_empty_space`
+  - File: `<provided test file>`, Function: `test_async`
+
+- Apparent similarity:
+  - These tests construct code snippets with `dedent(...)` and then perform completion-related assertions.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - Different call structures.
+    - Some call `.complete()` with no arguments.
+    - Some call `.complete(3, 7)`.
+    - Some call `.complete(column=...)`.
+  - Different fixtures/signatures.
+    - `test_async` has an additional `environment` fixture.
+  - Different assertion logic.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 6
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_start_match`
+  - File: `<provided test file>`, Function: `test_fuzzy_match`
+
+- Apparent similarity:
+  - Both test matching helper functions using boolean assertions.
+
+- Rejection reason:
+  - Different number of asserts.
+    - `test_start_match` has one assert.
+    - `test_fuzzy_match` has five asserts.
+  - Different called functions.
+    - `_start_match(...)` vs `_fuzzy_match(...)`.
+  - Not safely parametrizable without dynamic function selection or splitting assertions.
+
+- Correct classification:
+  - Not a parametrizable clone.
+
+---
+
+### Rejected Group 7
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_keyword_completion`
+  - File: `<provided test file>`, Function: `test_file_path_completions`
+  - File: `<provided test file>`, Function: `test_dict_keys_completions`
+  - File: `<provided test file>`, Function: `test_module_completions`
+
+- Apparent similarity:
+  - These are already parametrized completion-related tests.
+
+- Rejection reason:
+  - Different decorators / parametrization shapes.
+  - Different function signatures.
+  - Different body structures.
+  - Existing parametrized tests should not be merged unless decorators, signatures, and bodies are structurally equivalent.
+
+- Correct classification:
+  - Not safely parametrizable together.
+
+---
+
+### Rejected Group 8
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_points_in_completion`
+  - File: `<provided test file>`, Function: `test_function_param_usage`
+
+- Apparent similarity:
+  - Both inspect completion objects and assert `.name` / `.complete` values.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+    - `test_points_in_completion` has two asserts.
+    - `test_function_param_usage` has five asserts.
+  - Different assignment structures.
+    - `c = ...`
+    - `c, = ...`
+    - `c1, c2 = ...`
+  - Different call sequences.
+
+- Correct classification:
+  - Type-3 / semantic clone only.
+--------------------------------------------------
+Processing: test_api/test_search.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 2
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different decorators / parametrization shapes
+  - Different function signatures / fixtures and parameters
+  - Different number and structure of executable statements
+  - Different control flow
+  - Different function call structure
+  - Different assertion structure
+  - Not safely parametrizable as Type-2
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+
+- Functions:
+  - File: `<provided file>`, Function: `test_simple_search`
+  - File: `<provided file>`, Function: `test_complete_search`
+
+- Apparent similarity:
+  - Both are pytest test functions using `Script(path=__file__)`.
+  - Both test search/completion behavior.
+  - Both are already decorated with `pytest.mark.parametrize`.
+  - Both assign results to `defs` and assert a list comprehension against an expected list.
+
+- Rejection reason:
+  - Different decorators:
+    - `test_simple_search` parametrizes `'string, descriptions, kwargs'`.
+    - `test_complete_search` parametrizes `'string, completions, fuzzy, all_scopes'`.
+  - Different function signatures:
+    - `test_simple_search(Script, string, descriptions, kwargs)`
+    - `test_complete_search(Script, string, completions, fuzzy, all_scopes)`
+  - Different control flow:
+    - `test_simple_search` contains an `if/else` branch using `kwargs.pop(...)`.
+    - `test_complete_search` has no conditional control flow.
+  - Different call structure:
+    - `test_simple_search` conditionally calls either `.complete_search(string, **kwargs)` or `.search(string, **kwargs)`.
+    - `test_complete_search` always calls `.complete_search(string, fuzzy=fuzzy, all_scopes=all_scopes)`.
+  - Different executable statements:
+    - `test_simple_search` includes an additional assignment to `this_mod`.
+    - The list comprehension in the assertion performs `d.type + ' ' + d.full_name.replace(...)`.
+    - `test_complete_search` asserts `[d.complete for d in defs]`.
+  - Not safely parametrizable without adding conditionals or restructuring behavior.
+
+- Correct classification:
+  - Rejected: Type-3 / semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test_api/test_names.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 14
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 1
+- Total number of cloned test functions included in accepted clone classes: 4
+- Total number of rejected candidate groups: 5
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different call sequences / call structures
+  - Different decorators or function signatures
+  - Different accessed attributes or methods
+  - Semantic similarity without a safely identical syntactic template
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+#### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same body structure: a single call to `_check_names(get_names, <source>, <expected_names>)`. They differ only in source-code string literals and expected-name list literals. Signatures and decorators are equivalent: all accept only `get_names` and have no decorators.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_get_definitions_flat`
+  - File: `<provided test file>`, Function: `test_dotted_assignment`
+  - File: `<provided test file>`, Function: `test_multiple_assignment`
+  - File: `<provided test file>`, Function: `test_multiple_imports`
+
+Extracted parameters:
+
+- `source`: Python source snippet passed to `_check_names`
+- `expected_names`: expected list of definition names
+
+Example parametrization shape:
+
+```python
+@pytest.mark.parametrize(
+    "source, expected_names",
+    [
+        (
+            """
+            import module
+            class Class:
+                pass
+            def func():
+                pass
+            data = None
+            """,
+            ['module', 'Class', 'func', 'data'],
+        ),
+        (
+            """
+            x = Class()
+            x.y.z = None
+            """,
+            ['x', 'z'],
+        ),
+        (
+            "x = y = None",
+            ['x', 'y'],
+        ),
+        (
+            """
+            from module import a, b
+            from another_module import *
+            """,
+            ['a', 'b'],
+        ),
+    ],
+)
+def test_get_definitions_cases(get_names, source, expected_names):
+    _check_names(get_names, source, expected_names)
+```
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_nested_definitions`
+  - File: `<provided test file>`, Function: `test_nested_class`
+  - File: `<provided test file>`, Function: `test_class_fields_with_all_scopes_false`
+  - File: `<provided test file>`, Function: `test_async_stmt_with_all_scopes_false`
+
+- Apparent similarity:
+  - These tests all call `_check_names(...)`, then inspect nested `defined_names()` results and assert expected names.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different number of asserts.
+  - Different call sequences.
+  - Different levels of nested `defined_names()` inspection.
+  - Parametrizing them safely would require structural changes or conditionals.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_names_twice`
+  - File: `<provided test file>`, Function: `test_no_defined_names`
+
+- Apparent similarity:
+  - Both call `get_names(...)` and assert that a resulting definition has no defined names.
+
+- Rejection reason:
+  - Different number of executable statements.
+    - `test_names_twice` first assigns a dedented code string, then calls `get_names`.
+    - `test_no_defined_names` directly calls `get_names`.
+  - Different assignment targets:
+    - `defs = get_names(code)`
+    - `definition, = get_names(...)`
+  - Different assertion structure:
+    - `assert defs[0].defined_names() == []`
+    - `assert not definition.defined_names()`
+
+- Correct classification:
+  - Type-3 / semantic clone only, not safely parametrizable Type-2.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_simple_name`
+  - File: `<provided test file>`, Function: `test_no_defined_names`
+
+- Apparent similarity:
+  - Both are short tests that call `get_names(...)` and perform a single negative assertion.
+
+- Rejection reason:
+  - Different call structure:
+    - `get_names('foo', references=True)`
+    - `get_names("x = (1, 2)")`
+  - Different assertion targets:
+    - `defs[0]._name.infer()`
+    - `definition.defined_names()`
+  - Different attributes and methods are accessed.
+  - Different assignment target structure.
+
+- Correct classification:
+  - Semantic similarity only / not safely parametrizable.
+
+---
+
+#### Rejected Group 4
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_follow_imports`
+  - File: `<provided test file>`, Function: `test_no_error`
+
+- Apparent similarity:
+  - Both call `get_names(...)` and then assert properties of returned name definitions.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different number of asserts.
+  - Different call and access patterns:
+    - `test_follow_imports` indexes the first result and uses a list comprehension over `defined_names()`.
+    - `test_no_error` unpacks several names and checks `.name` and `.goto()` results.
+  - No shared parametrizable syntactic template.
+
+- Correct classification:
+  - Semantic clone only / not a Type-2 clone.
+
+---
+
+#### Rejected Group 5
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_is_side_effect`
+  - File: `<provided test file>`, Function: `test_simple_name`
+
+- Apparent similarity:
+  - Both call `get_names(..., references=True)` and assert a boolean-like property of one returned name.
+
+- Rejection reason:
+  - Different decorators:
+    - `test_is_side_effect` is already parametrized.
+    - `test_simple_name` is not parametrized.
+  - Different function signatures:
+    - `test_is_side_effect(get_names, code, index, is_side_effect)`
+    - `test_simple_name(get_names)`
+  - Different call structure:
+    - `get_names(code, references=True, all_scopes=True)`
+    - `get_names('foo', references=True)`
+  - Different assertion methods:
+    - `.is_side_effect()`
+    - `._name.infer()`
+
+- Correct classification:
+  - Rejected: different decorators/signatures and not safely parametrizable.
+--------------------------------------------------
+Processing: test_api/test_full_name.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 11  
+  - Includes top-level `test_` functions and statically defined `test_` methods, including mixin test methods that are inherited by pytest test classes.
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 3
+- Total number of cloned test functions included in accepted clone classes: 6
+- Total number of rejected candidate groups: 3
+
+Main reasons for rejection:
+
+- Different class scopes.
+- Different fixtures / function signatures.
+- Different number of executable statements.
+- Different function call structure.
+- Different attributes or methods.
+- Semantic similarity without safely equivalent structure.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both methods have the same body structure: a single `self.check(...)` call with two simple argument values. They differ only in the source snippet and expected full name.
+
+Members:
+
+- File: `<provided file>`, Function: `MixinTestFullName.test_os_path_join`
+- File: `<provided file>`, Function: `MixinTestFullName.test_builtin`
+
+Extracted parameters:
+
+- `source`: Python source snippet passed to `self.check`
+- `desired`: expected full name passed to `self.check`
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both methods have the same body structure: a single `self.check(...)` call with two arguments. They differ only in the source snippet and expected full name.
+
+Members:
+
+- File: `<provided file>`, Function: `TestFullNameWithGotoDefinitions.test_tuple_mapping`
+- File: `<provided file>`, Function: `TestFullNameWithGotoDefinitions.test_from_import`
+
+Extracted parameters:
+
+- `source`: Python source snippet passed to `self.check`
+- `desired`: expected full name passed to `self.check`
+
+---
+
+### Clone Class 3
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both methods have the same body structure: a single `self.check(...)` call with two arguments. They differ only in the source snippet and expected list of full names.
+
+Members:
+
+- File: `<provided file>`, Function: `TestFullDefinedName.test_local_names`
+- File: `<provided file>`, Function: `TestFullDefinedName.test_imports`
+
+Extracted parameters:
+
+- `source`: Python source snippet passed to `self.check`
+- `desired`: expected list of full names passed to `self.check`
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided file>`, Function: `MixinTestFullName.test_os_path_join`
+- File: `<provided file>`, Function: `MixinTestFullName.test_builtin`
+- File: `<provided file>`, Function: `TestFullNameWithGotoDefinitions.test_tuple_mapping`
+- File: `<provided file>`, Function: `TestFullNameWithGotoDefinitions.test_from_import`
+- File: `<provided file>`, Function: `TestFullDefinedName.test_local_names`
+- File: `<provided file>`, Function: `TestFullDefinedName.test_imports`
+
+Apparent similarity:
+
+- All functions consist of a single `self.check(...)` call with source input and expected output.
+
+Rejection reason:
+
+- Different scopes.
+- The helper method `check` belongs to different classes and has different behavior in `MixinTestFullName` versus `TestFullDefinedName`.
+- Grouping these together would require cross-class parametrization and would not be safely local to one test scope.
+
+Correct classification:
+
+- Rejected: different scope / not safely parametrizable as one clone class.
+- Valid Type-2 clone classes exist only within the individual class scopes, as listed in Part 2.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided file>`, Function: `test_sub_module`
+- File: `<provided file>`, Function: `test_os_path`
+
+Apparent similarity:
+
+- Both tests perform two lookup operations and assert `full_name` values.
+
+Rejection reason:
+
+- Different fixtures/signatures: `test_sub_module(Script, jedi_path)` versus `test_os_path(Script)`.
+- Different number of setup statements: `test_sub_module` creates `sys_path` and `project`; `test_os_path` does not.
+- Different call structure: `.infer()` with `project=project` versus `.complete()` without `project`.
+- Different assignment and assertion structure.
+
+Correct classification:
+
+- Rejected: Type-3 / structural difference.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<provided file>`, Function: `test_param_name`
+- File: `<provided file>`, Function: `test_variable_in_func`
+
+Apparent similarity:
+
+- Both use `Script(...)` and assert properties involving a name object and `full_name`.
+
+Rejection reason:
+
+- Different number of executable statements.
+  - `test_param_name` has one assignment and two asserts.
+  - `test_variable_in_func` has two assignments and two asserts.
+- Different function call structure: `.goto()` versus `.get_names(all_scopes=True)`.
+- Different attribute assertions: `name.type` versus `x.name`.
+- Parametrizing would require structural changes or conditional logic.
+
+Correct classification:
+
+- Rejected: Type-3 / semantic clone only, not safely parametrizable.
+--------------------------------------------------
+Processing: test_api/test_context.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None. Only one pytest test function was present, so no clone candidates exist.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups found.
+--------------------------------------------------
+Processing: test_api/test_environment.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 15
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 5
+
+Main reasons for rejection:
+
+- Different fixtures or function signatures
+- Different numbers or kinds of executable statements
+- Different control flow / call sequence
+- Different attributes or methods, e.g. `.path` vs `.executable`
+- Different decorators / existing parametrization mismatch
+- Semantic similarity without a safely identical parametrization structure
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_create_environment_venv_path`
+- File: `<provided test file>`, Function: `test_create_environment_executable`
+
+Apparent similarity:
+
+- Both call `create_environment(...)`.
+- Both assign the result to `environment`.
+- Both assert an attribute of `environment` equals the input value.
+
+Rejection reason:
+
+- Different fixtures/signatures:
+  - `test_create_environment_venv_path(venv_path)`
+  - `test_create_environment_executable()`
+- Different attributes:
+  - `environment.path`
+  - `environment.executable`
+
+Correct classification:
+
+- Rejected: not safely parametrizable / non-parametrizable Type-2 candidate
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_not_existing_virtualenv`
+- File: `<provided test file>`, Function: `test_working_venv`
+
+Apparent similarity:
+
+- Both set `VIRTUAL_ENV` using `monkeypatch`.
+- Both call `get_default_environment()`.
+- Both compare an environment attribute against the configured virtual environment value.
+
+Rejection reason:
+
+- Different number of executable statements:
+  - `test_not_existing_virtualenv` has an extra assignment to `path`.
+- Different fixtures/signatures:
+  - `test_not_existing_virtualenv(monkeypatch)`
+  - `test_working_venv(venv_path, monkeypatch)`
+- Different attributes:
+  - `.executable`
+  - `.path`
+- Different comparison operator:
+  - `!=`
+  - `==`
+
+Correct classification:
+
+- Rejected: Type-3 / not safely parametrizable
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_error_in_environment`
+- File: `<provided test file>`, Function: `test_killed_subprocess`
+
+Apparent similarity:
+
+- Both skip for `InterpreterEnvironment`.
+- Both expect `jedi.InternalError`.
+- Both subsequently call `Script('str').infer()`.
+- Both assert `def_.name == 'str'`.
+
+Rejection reason:
+
+- Different executable call sequence:
+  - `test_error_in_environment` calls `_test_raise_error(KeyboardInterrupt)` twice inside `pytest.raises`.
+  - `test_killed_subprocess` kills the subprocess, then expects `Script('str').infer()` to raise.
+- Different statement structure:
+  - One has two `with pytest.raises(...)` blocks.
+  - The other has a subprocess `.kill()` call and one `with pytest.raises(...)` block.
+- Different executable paths and recovery behavior.
+
+Correct classification:
+
+- Rejected: Type-3 / structural difference
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_working_venv`
+- File: `<provided test file>`, Function: `test_changing_venv`
+
+Apparent similarity:
+
+- Both manipulate `VIRTUAL_ENV`.
+- Both involve `get_default_environment()` or `get_cached_default_environment()`.
+- Both validate behavior after changing environment variables.
+
+Rejection reason:
+
+- Different number of statements.
+- Different function call structure:
+  - `monkeypatch.setenv(...)`
+  - `monkeypatch.setitem(...)`
+- Different environment API calls:
+  - `get_default_environment()`
+  - `get_cached_default_environment()`
+- Different assertions and setup sequence.
+
+Correct classification:
+
+- Rejected: semantic clone only / Type-3 structural difference
+
+---
+
+### Rejected Group 5
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_get_default_environment_from_env_does_not_use_safe`
+- File: `<provided test file>`, Function: `test_get_default_environment_when_embedded`
+
+Apparent similarity:
+
+- Both monkeypatch environment-related behavior.
+- Both set `VIRTUAL_ENV`.
+- Both call `get_default_environment()`.
+- Both assert a property of the returned environment.
+
+Rejection reason:
+
+- Different decorators:
+  - `test_get_default_environment_when_embedded` is already parametrized.
+  - `test_get_default_environment_from_env_does_not_use_safe` is not.
+- Different fixtures/signatures:
+  - `test_get_default_environment_from_env_does_not_use_safe(tmpdir, monkeypatch)`
+  - `test_get_default_environment_when_embedded(monkeypatch, virtualenv)`
+- Different number of executable statements.
+- Different structure:
+  - One creates a fake file and defines an inner replacement function.
+  - The other monkeypatches `sys.executable`.
+- Different assertion target:
+  - `env.path == 'fake'`
+  - `env.executable != executable_name`
+
+Correct classification:
+
+- Rejected: Type-3 / semantic clone only / different decorators
+--------------------------------------------------
+Processing: test_api/test_documentation.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 17
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 6
+
+Main reasons for rejection:
+
+- Different function call structures, especially different `.help(...)` argument counts or keyword names.
+- Different number of executable statements or asserts.
+- Different assertion structures, e.g. `assert X` vs `assert not X`, equality vs membership vs `startswith`.
+- Different fixtures or function signatures.
+- Different or incompatible parametrization decorators.
+- Similar semantic intent but not safely parametrizable without changing structure.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<input>`, Function: `test_error_leaf_keyword_doc`
+- File: `<input>`, Function: `test_error_leaf_operator_doc`
+- File: `<input>`, Function: `test_operator_doc`
+
+Apparent similarity:
+
+- These tests all call `Script(...).help(...)`.
+- They all inspect `d.docstring()` length with `len(...) > 100`.
+
+Rejection reason:
+
+- Different function call structure:
+  - `help(1, 1)`
+  - `help()`
+  - `help(1, 3)`
+- Different number of asserts/statements:
+  - `test_operator_doc` lacks the `assert d.name == ...` assertion present in the other two.
+
+Correct classification:
+
+- Type-3 / non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<input>`, Function: `test_import_keyword`
+- File: `<input>`, Function: `test_import_keyword_after_newline`
+
+Apparent similarity:
+
+- Both test documentation for the `import` keyword.
+- Both assign from `Script(...).help(...)`.
+- Both assert that the docstring starts with `'The "import" statement'`.
+
+Rejection reason:
+
+- Different function call structure:
+  - `help(column=0)`
+  - `help(line=2, column=0)`
+- The keyword argument set differs, so this would require parametrizing call shape or using dynamic kwargs.
+
+Correct classification:
+
+- Non-parametrizable Type-2 / structural difference.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<input>`, Function: `test_import_keyword`
+- File: `<input>`, Function: `test_lambda`
+
+Apparent similarity:
+
+- Both call `Script(...).help(column=0)`.
+- Both inspect keyword-related documentation.
+- Both use `d.docstring().startswith(...)`.
+
+Rejection reason:
+
+- Different number of asserts:
+  - `test_lambda` has an extra `assert d.type == 'keyword'`.
+- Different assertion structure:
+  - `test_import_keyword` only checks the docstring prefix.
+  - `test_lambda` checks both `d.type` and the docstring prefix.
+
+Correct classification:
+
+- Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<input>`, Function: `test_help_no_returns`
+- File: `<input>`, Function: `test_empty`
+- File: `<input>`, Function: `test_no_help_for_operator`
+- File: `<input>`, Function: `test_help_for_operator`
+
+Apparent similarity:
+
+- These tests all call `Script(code).help(...)`.
+- They all check whether help results are returned.
+- All are already parametrized tests involving `code`.
+
+Rejection reason:
+
+- Different fixtures/signatures:
+  - `test_help_no_returns(Script, code, kwargs)`
+  - others use `test_...(Script, code)`
+- Different function call structures:
+  - `help(**kwargs)`
+  - `help(1, 0)`
+  - `help()`
+- Different assertion structure:
+  - `assert not Script(code).help(...)`
+  - `assert Script(code).help()`
+- Existing parametrized decorators are not structurally equivalent.
+
+Correct classification:
+
+- Non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 5
+
+Functions:
+
+- File: `<input>`, Function: `test_no_help_for_operator`
+- File: `<input>`, Function: `test_help_for_operator`
+
+Apparent similarity:
+
+- Both are parametrized over `code`.
+- Both call `Script(code).help()`.
+- They test whether operator-like code snippets produce help results.
+
+Rejection reason:
+
+- Different assertion structure:
+  - `assert not Script(code).help()`
+  - `assert Script(code).help()`
+- Different parametrization shapes:
+  - one has 3 values;
+  - the other has 5 values.
+- Combining these would require adding an expected boolean or changing the assertion template.
+
+Correct classification:
+
+- Non-parametrizable Type-2 / not safely parametrizable.
+
+---
+
+### Rejected Group 6
+
+Functions:
+
+- File: `<input>`, Function: `test_builtin_docstring`
+- File: `<input>`, Function: `test_docstring_decorator`
+
+Apparent similarity:
+
+- Both use `goto_or_help_or_infer`.
+- Both retrieve `doc = d.docstring()`.
+- Both validate docstring contents.
+
+Rejection reason:
+
+- Different executable statement structure:
+  - `test_docstring_decorator` has an additional `code = dedent(...)` setup statement before the call.
+- Different assertion structure:
+  - `test_builtin_docstring` uses `startswith` and membership assertions.
+  - `test_docstring_decorator` uses equality.
+- Different number of asserts:
+  - `test_builtin_docstring` has two asserts.
+  - `test_docstring_decorator` has one assert.
+
+Correct classification:
+
+- Semantic clone only / Type-3 structural difference.
+--------------------------------------------------
+Processing: test_api/test_signatures.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 4
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different fixtures / function signatures
+  - Different decorators / parametrization shapes
+  - Different function call structure
+  - Not safely parametrizable as Type-2
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_param_annotation`
+  - File: `<input>`, Function: `test_param_default`
+
+- Apparent similarity:
+  - Both tests are parametrized.
+  - Both create a `Script(code)`, retrieve a function signature, iterate over `sig.params` and `expected_params`, infer something from each parameter, and assert either no result or a matching `.description`.
+
+- Rejection reason:
+  - Different fixtures / signatures:
+    - `test_param_annotation(Script, code, expected_params, execute_annotation)`
+    - `test_param_default(Script, code, expected_params)`
+  - Different decorators / parametrization shapes:
+    - `test_param_annotation` parametrizes `code, expected_params, execute_annotation`
+    - `test_param_default` parametrizes `code, expected_params`
+  - Different function call structure:
+    - `p.infer_annotation(execute_annotation=execute_annotation)`
+    - `p.infer_default()`
+  - The difference would require parametrizing the method being called or adding conditional/dynamic behavior, which is not safely parametrizable under the rules.
+
+- Correct classification:
+  - Rejected: non-parametrizable Type-2 / structural difference.
+--------------------------------------------------
+Processing: test_api/test_syntax_errors.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+
+Main reasons for rejection:
+
+- Different decorators / parametrization shapes
+- Different function signatures / fixtures
+- Different number of executable statements
+- Different number of assertions
+- Different call/unpacking structure
+- Semantic similarity only, not safely parametrizable Type-2 structure
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_simple_syntax_errors`
+- File: `<provided test file>`, Function: `test_no_syntax_errors`
+- File: `<provided test file>`, Function: `test_multi_syntax_error`
+
+Apparent similarity:
+
+- All three tests exercise `Script(code).get_syntax_errors()`.
+- They all validate Jedi/Parso syntax error behavior.
+- They are semantically related around syntax error detection.
+
+Rejection reason:
+
+- `test_simple_syntax_errors` is parametrized with six parameters and asserts detailed properties of a single syntax error.
+- `test_no_syntax_errors` is parametrized with only `code` and asserts that no syntax errors are returned.
+- `test_multi_syntax_error` is not parametrized, creates a multiline `code` value with `dedent`, unpacks three syntax errors, and asserts multiple line/column values.
+- The functions have different decorators.
+- The functions have different signatures.
+- The functions have different numbers of statements.
+- The functions have different numbers of assertions.
+- The unpacking/call usage differs: one unpacks one error, one checks falsiness, one unpacks three errors.
+- Converting these into one parametrized test would require conditional logic or structural changes.
+
+Correct classification:
+
+- Semantic clone only / non-parametrizable structural similarity.
+- Not a valid Type-1 or Type-2 parametrizable clone group.
+--------------------------------------------------
+Processing: test_api/test_usages.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None. No meaningful clone candidates were identified.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups were identified.
+--------------------------------------------------
+Processing: test_api/test_analysis.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None; no candidate clone groups were found.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups were found.
+--------------------------------------------------
+Processing: test_api/test_api.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 27
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 8
+
+Main reasons for rejection:
+
+- Different number of executable statements
+- Different number of asserts
+- Different fixtures / function signatures
+- Different decorators / parametrization shapes
+- Different function call structure
+- Different attributes or methods
+- Different control flow
+- Semantic similarity only, not safely parametrizable as Type-2
+
+No safe function-level Type-1 or Type-2 parametrizable clone classes were found.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+None.
+
+No test functions have bodies that are identical or structurally equivalent enough to be safely merged with `pytest.mark.parametrize` without introducing conditionals, dynamic calls, `getattr`, changed control flow, or behavior changes.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided file>`, Function: `test_completion_on_number_literals`
+- File: `<provided file>`, Function: `test_completion_on_hex_literals`
+- File: `<provided file>`, Function: `test_completion_on_complex_literals`
+
+Apparent similarity:
+
+- All test completions on numeric literals.
+- All use `Script(...).complete()` and `_check_number(...)`.
+- All compare completion results for numeric literal edge cases.
+
+Rejection reason:
+
+- Different number of statements.
+- Different number of asserts.
+- Different call sequences.
+- Different tested literal categories require different executable checks.
+
+Correct classification:
+
+- Type-3 / semantic clone only.
+- Not safely parametrizable as a function-level Type-2 clone.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided file>`, Function: `test_goto_non_name`
+- File: `<provided file>`, Function: `test_infer_on_non_name`
+
+Apparent similarity:
+
+- Both test that Jedi returns an empty result for invalid or non-name input.
+
+Rejection reason:
+
+- Different fixtures / signatures: `test_goto_non_name(Script, environment)` vs `test_infer_on_non_name(Script)`.
+- Different number of asserts: three asserts vs one assert.
+- Different method calls: `.goto()` vs `.infer(column=0)`.
+
+Correct classification:
+
+- Semantic clone only / non-parametrizable Type-2.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<provided file>`, Function: `test_infer_on_generator`
+- File: `<provided file>`, Function: `test_multi_goto`
+
+Apparent similarity:
+
+- Both use a `script = Script(...)` setup.
+- Both unpack results from Jedi API calls.
+- Both assert attributes on returned definitions.
+
+Rejection reason:
+
+- Different function call structure: `.infer()` / `.infer(only_stubs=True)` vs `.goto(line=3)` / `.goto(line=4)`.
+- Different asserted attributes: `.name` vs `.line`.
+- Different semantic intent.
+- Would require parametrizing method names or keyword argument names, which is not allowed.
+
+Correct classification:
+
+- Type-3 / semantic clone only.
+- Not safely parametrizable.
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<provided file>`, Function: `test_completions_order_most_resemblance_on_top`
+- File: `<provided file>`, Function: `test_fuzzy_completion`
+
+Apparent similarity:
+
+- Both create a `Script`.
+- Both assert ordered completion names using `[comp.name for comp in script.complete(...)]`.
+
+Rejection reason:
+
+- Different number of statements: one assigns `code` separately, the other does not.
+- Different function call structure: `.complete()` vs `.complete(fuzzy=True)`.
+- Different completion modes being tested.
+
+Correct classification:
+
+- Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 5
+
+Functions:
+
+- File: `<provided file>`, Function: `test_fuzzy_completion`
+- File: `<provided file>`, Function: `test_math_fuzzy_completion`
+- File: `<provided file>`, Function: `test_file_fuzzy_completion`
+
+Apparent similarity:
+
+- All test fuzzy completions.
+- All compare expected completion names against `script.complete(fuzzy=True)` results.
+
+Rejection reason:
+
+- Different number of statements.
+- `test_math_fuzzy_completion` introduces a separate `completions` variable and a `for` loop with an additional assert.
+- `test_file_fuzzy_completion` introduces a `path` setup statement and uses string formatting.
+- Different number of asserts.
+- Different control flow due to the loop in `test_math_fuzzy_completion`.
+
+Correct classification:
+
+- Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 6
+
+Functions:
+
+- File: `<provided file>`, Function: `test_get_line_code`
+- File: `<provided file>`, Function: `test_get_line_code_on_builtin`
+
+Apparent similarity:
+
+- Both test `get_line_code()` behavior.
+
+Rejection reason:
+
+- Different executable structure.
+- `test_get_line_code` defines a nested helper function and performs multiple line-window assertions.
+- `test_get_line_code_on_builtin` directly inspects a builtin completion object.
+- Different number of statements and asserts.
+
+Correct classification:
+
+- Semantic clone only / Type-3.
+
+---
+
+### Rejected Group 7
+
+Functions:
+
+- File: `<provided file>`, Function: `test_goto_follow_imports`
+- File: `<provided file>`, Function: `test_goto_follow_builtin_imports`
+- File: `<provided file>`, Function: `test_goto_module`
+
+Apparent similarity:
+
+- All test `goto(...)` behavior involving imports or modules.
+- All validate returned definitions or module paths.
+
+Rejection reason:
+
+- Different executable structures.
+- `test_goto_module` defines a nested `check(...)` helper.
+- `test_goto_follow_imports` contains many sequential API calls and assertions.
+- `test_goto_follow_builtin_imports` has a much smaller structure.
+- Different call structures and asserted attributes.
+
+Correct classification:
+
+- Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 8
+
+Functions:
+
+- File: `<provided file>`, Function: `test_goto_on_string`
+- File: `<provided file>`, Function: `test_infer_after_parentheses`
+
+Apparent similarity:
+
+- Both are already parametrized tests.
+- Both accept `Script`, `code`, and `column`.
+- Both call Jedi APIs with `column=column`.
+
+Rejection reason:
+
+- Different decorators / parametrization shapes.
+  - `test_goto_on_string` parametrizes `code, column`.
+  - `test_infer_after_parentheses` parametrizes `code, column, expected`.
+- Different function signatures.
+- Different body control flow.
+  - `test_infer_after_parentheses` contains an `if/else`.
+  - `test_goto_on_string` contains only two direct assertions.
+- Different number of asserts.
+- Different API call sequence.
+
+Correct classification:
+
+- Non-parametrizable Type-2 / Type-3 due to structural differences.
+--------------------------------------------------
+Processing: test_api/test_settings.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None — only one pytest test function was provided, so no clone candidates exist.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups.
+--------------------------------------------------
+Processing: test_api/test_project.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 8
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different decorators / parametrization shapes
+  - Different fixtures or function signatures
+  - Different number of statements
+  - Different control flow
+  - Different function call structure
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `test_search`
+  - File: `<provided file>`, Function: `test_complete_search`
+
+- Apparent similarity:
+  - Both are parametrized pytest tests.
+  - Both create a `Project(test_dir)`.
+  - Both perform a search/completion-related operation and assert collected results against expected values.
+
+- Rejection reason:
+  - Different decorators / parametrization shapes:
+    - `test_search` parametrizes `string, full_names, kwargs`.
+    - `test_complete_search` parametrizes `string, completions, all_scopes`.
+  - Different fixtures/signatures:
+    - `test_search(string, full_names, kwargs)`
+    - `test_complete_search(Script, string, completions, all_scopes)`
+  - Different control flow:
+    - `test_search` contains an `if/else`.
+    - `test_complete_search` has no conditional.
+  - Different statement structure and call sequence:
+    - `test_search` may call either `project.complete_search(...)` or `project.search(...)`.
+    - `test_complete_search` always calls `project.complete_search(...)`.
+
+- Correct classification:
+  - Rejected: Type-3 / structural difference
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided file>`, Function: `test_django_default_project_of_file`
+  - File: `<provided file>`, Function: `test_interpreter_project_path`
+
+- Apparent similarity:
+  - Both obtain a project object.
+  - Both assert against `project._path`.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different control flow:
+    - `test_interpreter_project_path` uses a `with set_cwd(dir):` block.
+    - `test_django_default_project_of_file` does not.
+  - Different function call structure:
+    - One uses `get_default_project(__file__)`.
+    - The other constructs an `Interpreter(...)._inference_state.project`.
+  - Semantic similarity only; they test related project-path behavior but with different executable structure.
+
+- Correct classification:
+  - Rejected: semantic clone only / Type-4
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided file>`, Function: `test_added_sys_path`
+  - File: `<provided file>`, Function: `test_load_save_project`
+
+- Apparent similarity:
+  - Both test project `added_sys_path` behavior.
+  - Both create or retrieve a `Project`.
+  - Both assert that a sys-path-related value is preserved or present.
+
+- Rejection reason:
+  - Different function signatures:
+    - `test_added_sys_path(inference_state)`
+    - `test_load_save_project(tmpdir)`
+  - Different statement structure:
+    - `test_added_sys_path` mutates `project.added_sys_path` directly.
+    - `test_load_save_project` constructs a `Project`, saves it, loads it, and asserts loaded state.
+  - Different function call sequence:
+    - `get_default_project()` / `_get_sys_path(...)`
+    - `Project(...)` / `project.save()` / `Project.load(...)`
+  - Semantic similarity only; not structurally equivalent.
+
+- Correct classification:
+  - Rejected: semantic clone only / non-parametrizable Type-2
+--------------------------------------------------
+Processing: test_api/test_unicode.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 2
+
+Main reasons for rejection:
+
+- Different number of asserts/statements
+- Different function call structure
+- Different methods/attributes
+- Semantic similarity only
+- Not safely parametrizable without dynamic method/attribute selection or structural changes
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided file>`, Function: `test_goto_definition_at_zero`
+- File: `<provided file>`, Function: `test_complete_at_zero`
+
+Apparent similarity:
+
+- Both tests exercise `Script(...)` behavior at or near zero/edge positions.
+- Both use a `Script("str")` call, store the result in `s`, assert its length, and inspect the first result.
+
+Rejection reason:
+
+- Different number of asserts:
+  - `test_goto_definition_at_zero` has 4 asserts.
+  - `test_complete_at_zero` has 3 asserts.
+- Different function call structure:
+  - Uses `.infer(...)` in one test and `.complete(...)` in the other.
+- Different attributes/methods:
+  - Checks `.description` in one test and `.name` in the other.
+- Different expected comparison structure:
+  - One checks equality to `[]`.
+  - The other checks `len(s) > 0`.
+- Not safely parametrizable without dynamic method or attribute selection.
+
+Correct classification:
+
+- Type-3 / semantic clone only, not a parametrizable Type-2 clone.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided file>`, Function: `test_unicode_script`
+- File: `<provided file>`, Function: `test_unicode_attribute`
+- File: `<provided file>`, Function: `test_multibyte_script`
+
+Apparent similarity:
+
+- All three tests involve Unicode or multibyte source handling through `Script`.
+- All use completion-related behavior.
+- All receive the same `Script` fixture.
+
+Rejection reason:
+
+- Different number of statements.
+- Different number of asserts.
+- Different call structures:
+  - `test_unicode_script` calls `.complete()` multiple times with no explicit position arguments.
+  - `test_unicode_attribute` calls `.complete()` on two different source strings.
+  - `test_multibyte_script` calls `.complete(1, len(code))` with explicit position arguments.
+- Different assertion structures:
+  - Type checks against `str`.
+  - Membership checks for `'strip'`.
+  - Length assertion on completion result.
+- Semantic similarity only; the executable structures are not equivalent.
+
+Correct classification:
+
+- Semantic clone only / non-parametrizable Type-2.
+--------------------------------------------------
+Processing: test_api/test_api_classes_follow_definition.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 4
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different call sequences
+  - Not safely parametrizable without structural changes
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_follow_import_incomplete`
+  - File: `<input>`, Function: `test_follow_definition_nested_import`
+  - File: `<input>`, Function: `test_follow_definition_land_on_import`
+
+- Apparent similarity:
+  - These tests all use `check_follow_definition_types(...)` to inspect inferred definition types.
+  - They all assert that the returned type list or set matches an expected value.
+
+- Rejection reason:
+  - Different number of statements:
+    - `test_follow_import_incomplete` contains multiple independent completion/inference checks.
+    - `test_follow_definition_nested_import` contains three repeated assignment/assert pairs plus a `partial(...)` setup assignment.
+    - `test_follow_definition_land_on_import` contains only one assignment/assert pair.
+  - Different number of asserts:
+    - `test_follow_import_incomplete` has several asserts.
+    - `test_follow_definition_nested_import` has three asserts.
+    - `test_follow_definition_land_on_import` has one assert.
+  - Different call sequences:
+    - `test_follow_import_incomplete` also calls `jedi.Script(...).complete()` directly and performs list filtering.
+    - `test_follow_definition_nested_import` modifies `Script` using `partial(...)`.
+    - `test_follow_definition_land_on_import` only calls the helper once.
+  - Not safely parametrizable:
+    - Combining these would require restructuring the tests, adding loops, conditionals, or separating setup paths.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+--------------------------------------------------
+Processing: test_api/test_interpreter.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 49
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 2
+- Total number of cloned test functions included in accepted clone classes: 4
+- Total number of rejected candidate groups: 4
+
+Main reasons for rejection:
+
+- Import statements differed structurally or required dynamic namespace manipulation.
+- Class definitions differed structurally, e.g. missing vs present base class.
+- Candidate groups had different setup statements, different helper-call sequences, or different assertion structure.
+- Existing parametrized tests had different decorators, signatures, or executable bodies.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same executable structure: define the same class, assign a string value to `baz`, and call `_assert_interpreter_complete(...)`. They differ only in literal string values, including the code snippet passed as a string.
+
+Members:
+
+- File: `<provided test file>`, Function: `test_getattr`
+- File: `<provided test file>`, Function: `test_slice`
+
+Extracted parameters:
+
+- `baz_value`: value assigned to `baz`
+  - `test_getattr`: `'bar'`
+  - `test_slice`: `'xbarx'`
+- `source`: source string passed to `_assert_interpreter_complete`
+  - `test_getattr`: `'getattr(Foo1, baz).app'`
+  - `test_slice`: `'getattr(Foo1, baz[1:-1]).append'`
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same structure: assign `x = 1`, call `jedi.Interpreter(...).infer()`, destructure the single result, and assert that the inferred name is `'int'`. They differ only in the source-code string passed to `jedi.Interpreter`.
+
+Members:
+
+- File: `<provided test file>`, Function: `test_name_not_inferred_properly`
+- File: `<provided test file>`, Function: `test_variable_reuse`
+
+Extracted parameters:
+
+- `source`: source string passed to `jedi.Interpreter`
+  - `test_name_not_inferred_properly`: `'x = UNDEFINED; x'`
+  - `test_variable_reuse`: `'y = x\ny'`
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_complete_raw_function`
+- File: `<provided test file>`, Function: `test_complete_raw_function_different_name`
+- File: `<provided test file>`, Function: `test_complete_raw_module`
+
+Apparent similarity:
+
+- Each imports something and then calls `_assert_interpreter_complete(...)` expecting `['upper']`.
+
+Rejection reason:
+
+- Different import structures:
+  - `from os.path import join`
+  - `from os.path import join as pjoin`
+  - `import os`
+- The first two differ by presence/absence of an alias.
+- The third uses a module import instead of an imported function.
+- Safely parametrizing these would require changing import/namespace behavior or dynamically selecting local names.
+
+Correct classification:
+
+- Rejected: structural difference / not safely parametrizable.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_property_error_oldstyle`
+- File: `<provided test file>`, Function: `test_property_error_newstyle`
+
+Apparent similarity:
+
+- Both define a `Foo3` class with a `bar` property that appends to `lst` and raises `ValueError`.
+- Both instantiate `Foo3`, perform the same two `_assert_interpreter_complete(...)` calls, and then assert `lst` based on `allow_unsafe_getattr`.
+
+Rejection reason:
+
+- The class definitions differ structurally:
+  - `class Foo3:`
+  - `class Foo3(object):`
+- This is not merely a literal or identifier-value difference; the class base list differs.
+- Parametrizing this safely would require dynamic class construction or conditional logic.
+
+Correct classification:
+
+- Rejected: Type-3 / structural difference.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_complete_raw_instance`
+- File: `<provided test file>`, Function: `test_endless_yield`
+
+Apparent similarity:
+
+- Both create local data and call `_assert_interpreter_complete(...)` to check completions.
+
+Rejection reason:
+
+- Different number and type of setup statements.
+- `test_complete_raw_instance` imports `datetime`, creates a `datetime` value, assigns a `completions` list, and passes that variable.
+- `test_endless_yield` creates a large list and passes the expected list literal directly.
+- The executable setup structure is not equivalent.
+
+Correct classification:
+
+- Rejected: Type-3 / structural difference.
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<provided test file>`, Function: `test_simple_completions`
+- File: `<provided test file>`, Function: `test_dict_getitem`
+- File: `<provided test file>`, Function: `test_keyword_param_completion`
+
+Apparent similarity:
+
+- These are existing parametrized tests that pass a `code` string into `jedi.Interpreter(...)` and compare completion or inference results with an expected list.
+
+Rejection reason:
+
+- Decorators are not structurally equivalent.
+- Function signatures differ:
+  - `test_simple_completions(code, completions)`
+  - `test_dict_getitem(code, types)`
+  - `test_keyword_param_completion(code, expected)`
+- Bodies differ meaningfully:
+  - `.complete()` vs `.infer()`
+  - different setup statements
+  - different assertion expressions
+  - filtering with `c.name.endswith('=')` only in `test_keyword_param_completion`
+
+Correct classification:
+
+- Rejected: semantic clone only / not safely parametrizable.
+--------------------------------------------------
