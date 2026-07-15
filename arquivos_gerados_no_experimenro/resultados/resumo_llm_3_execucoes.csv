@@ -1,2 +1,0 @@
-metodo,precisao_media,desvio_padrao,coeficiente_variacao,ic95_media_inf,ic95_media_sup,media_classes_retornadas,media_classes_corretas_estimadas
-LLM média das 3 execuções,0.9873315363881402,0.014557751607968497,0.014744542305641038,0.9511680766209398,1.0234949961553406,146.66666666666666,144.83611859838274
