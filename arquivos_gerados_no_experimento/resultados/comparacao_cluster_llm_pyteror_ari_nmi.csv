@@ -1,0 +1,4 @@
+execucao,funcoes_comuns,adjusted_rand_index,normalized_mutual_information
+LLM Execução 1,125,0.9089749039737333,0.9825535249817866
+LLM Execução 2,125,0.9089749039737333,0.9825535249817866
+LLM Execução 3,122,0.9077733865653083,0.9819294953818022

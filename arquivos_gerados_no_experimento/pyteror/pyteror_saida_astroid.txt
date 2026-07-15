@@ -1,0 +1,143 @@
+Clone detection logged in nicad2026-05-05_00-20-59.log
+
+Created clone class 1 with contents:
+   Function test_update_content
+   Function test_update_content_major
+Refactored clone class 1
+  into test_update_content in file: /home/alisson/python/repositorios/astroid/script/test_bump_changelog.py
+    Parametrized 3 constants.
+    Parametrized 0 names.
+    Parametrized 0 other nodes.
+
+Created clone class 2 with contents:
+   Function TestHelpers.test_inference_errors
+   Function TestHelpers.test_object_type_too_many_types
+Refactored clone class 2
+  into test_inference_errors in file: /home/alisson/python/repositorios/astroid/tests/test_helpers.py
+    Parametrized 1 constants.
+    Parametrized 0 names.
+    Parametrized 0 other nodes.
+
+Created clone class 3 with contents:
+   Function TestHelpers.test_is_subtype_supertype_classes_no_type_ancestor
+   Function TestHelpers.test_is_subtype_supertype_classes_metaclasses
+Splitting clone class into 2 classes because of a difference in attributes.
+
+Created clone class 3.1 with contents:
+   Function TestHelpers.test_is_subtype_supertype_classes_no_type_ancestor
+Aborted refactoring of clone class 3.1: Cannot parametrize one or fewer tests.
+
+Created clone class 3.2 with contents:
+   Function TestHelpers.test_is_subtype_supertype_classes_metaclasses
+Aborted refactoring of clone class 3.2: Cannot parametrize one or fewer tests.
+
+Created clone class 4 with contents:
+   Function TestLinenoColOffset.test_end_lineno_container
+   Function TestLinenoColOffset.test_end_lineno_import
+Splitting clone class into 2 classes because of a difference in attributes.
+
+Created clone class 4.1 with contents:
+   Function TestLinenoColOffset.test_end_lineno_container
+Aborted refactoring of clone class 4.1: Cannot parametrize one or fewer tests.
+
+Created clone class 4.2 with contents:
+   Function TestLinenoColOffset.test_end_lineno_import
+Aborted refactoring of clone class 4.2: Cannot parametrize one or fewer tests.
+
+Created clone class 5 with contents:
+Aborted refactoring of clone class 5: Cannot parametrize one or fewer tests.
+
+Created clone class 6 with contents:
+Aborted refactoring of clone class 6: Cannot parametrize one or fewer tests.
+
+Created clone class 7 with contents:
+Aborted refactoring of clone class 7: Cannot parametrize one or fewer tests.
+
+Created clone class 8 with contents:
+Aborted refactoring of clone class 8: Cannot parametrize one or fewer tests.
+
+Created clone class 9 with contents:
+Aborted refactoring of clone class 9: Cannot parametrize one or fewer tests.
+
+Created clone class 10 with contents:
+Aborted refactoring of clone class 10: Cannot parametrize one or fewer tests.
+
+Created clone class 11 with contents:
+Aborted refactoring of clone class 11: Cannot parametrize one or fewer tests.
+
+Created clone class 12 with contents:
+Aborted refactoring of clone class 12: Cannot parametrize one or fewer tests.
+
+Created clone class 13 with contents:
+Aborted refactoring of clone class 13: Cannot parametrize one or fewer tests.
+
+Created clone class 14 with contents:
+Aborted refactoring of clone class 14: Cannot parametrize one or fewer tests.
+
+Created clone class 15 with contents:
+Aborted refactoring of clone class 15: Cannot parametrize one or fewer tests.
+
+Created clone class 16 with contents:
+Aborted refactoring of clone class 16: Cannot parametrize one or fewer tests.
+
+Created clone class 17 with contents:
+Aborted refactoring of clone class 17: Cannot parametrize one or fewer tests.
+
+Created clone class 18 with contents:
+   Function test_inference_parents
+   Function test_inference_parents_subscript_index
+Refactored clone class 18
+  into test_inference_parents in file: /home/alisson/python/repositorios/astroid/tests/brain/test_pathlib.py
+    Parametrized 2 constants.
+    Parametrized 0 names.
+    Parametrized 0 other nodes.
+
+Created clone class 19 with contents:
+Aborted refactoring of clone class 19: Cannot parametrize one or fewer tests.
+
+Created clone class 20 with contents:
+Aborted refactoring of clone class 20: Cannot parametrize one or fewer tests.
+
+Created clone class 21 with contents:
+   Function TestSys.test_sys_builtin_module_names
+   Function TestSys.test_sys_modules
+Splitting clone class into 2 classes because of a difference in attributes.
+
+Created clone class 21.1 with contents:
+   Function TestSys.test_sys_builtin_module_names
+Aborted refactoring of clone class 21.1: Cannot parametrize one or fewer tests.
+
+Created clone class 21.2 with contents:
+   Function TestSys.test_sys_modules
+Aborted refactoring of clone class 21.2: Cannot parametrize one or fewer tests.
+
+Created clone class 22 with contents:
+   Function test_type_param_spec
+   Function test_type_var_tuple
+Refactored clone class 22
+  into test_type_param_spec in file: /home/alisson/python/repositorios/astroid/tests/test_type_params.py
+    Parametrized 2 constants.
+    Parametrized 1 names.
+    Parametrized 0 other nodes.
+
+Created clone class 23 with contents:
+Aborted refactoring of clone class 23: Cannot parametrize one or fewer tests.
+refactored file: /home/alisson/python/repositorios/astroid/script/test_bump_changelog.py
+        -> /home/alisson/python/repositorios/astroid/script/test_bump_changelog.py
+refactored file: /home/alisson/python/repositorios/astroid/tests/test_helpers.py
+        -> /home/alisson/python/repositorios/astroid/tests/test_helpers.py
+refactored file: /home/alisson/python/repositorios/astroid/tests/brain/test_pathlib.py
+        -> /home/alisson/python/repositorios/astroid/tests/brain/test_pathlib.py
+refactored file: /home/alisson/python/repositorios/astroid/tests/test_type_params.py
+        -> /home/alisson/python/repositorios/astroid/tests/test_type_params.py
+Parametrized 8
+in 4 targets
+
+Experiment results:
+Total tests in suite: 422
+Total clone classes in suite: 23
+Total test clones in suite: 14
+Total tests removed due to parametrization: 4
+Total clone classes parametrized: 4
+% of tests removed: 0.9478672985781991 %
+% of clones removed: 57.14285714285714 %

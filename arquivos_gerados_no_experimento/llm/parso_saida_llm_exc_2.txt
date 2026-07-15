@@ -1,0 +1,2581 @@
+Processing: test/test_diff_parser.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 81
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 9
+- Total number of cloned test functions included in accepted clone classes: 45
+- Total number of rejected candidate groups: 10
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different parse-call sequences
+  - Different keyword argument shapes/order
+  - Different decorators/signatures
+  - Different construction of `code1` / `code2`
+  - Extra intermediate code mutations
+  - Semantic similarity only, not structurally parametrizable
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same structure: assign `code1` using `dedent(...)`, assign `code2` using `dedent(...)`, initialize with `code1`, parse `code2` with `parsers`, `copies`, and `expect_error_leaves=True`, then parse `code1` again with `parsers` and `copies`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_one_call_in_function_change`
+  - File: `<provided test file>`, Function: `test_function_deletion`
+  - File: `<provided test file>`, Function: `test_paren_in_strange_position`
+  - File: `<provided test file>`, Function: `test_parentheses_before_method`
+  - File: `<provided test file>`, Function: `test_error_dedent_issues`
+  - File: `<provided test file>`, Function: `test_random_text_insertion`
+  - File: `<provided test file>`, Function: `test_many_nested_ifs`
+  - File: `<provided test file>`, Function: `test_backslash_issue`
+  - File: `<provided test file>`, Function: `test_paren_with_indentation`
+  - File: `<provided test file>`, Function: `test_backslash_insertion`
+  - File: `<provided test file>`, Function: `test_yet_another_backslash`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `first_parse_parsers`: expected parser count for parsing `code2`
+- `first_parse_copies`: expected copy count for parsing `code2`
+- `second_parse_parsers`: expected parser count for parsing `code1`
+- `second_parse_copies`: expected copy count for parsing `code1`
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same two-code-snippet structure and perform two parse calls. The calls use the same keyword shape: first `differ.parse(code2, parsers=..., copies=...)`, then `differ.parse(code1, parsers=..., copies=...)`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_differing_docstrings`
+  - File: `<provided test file>`, Function: `test_docstring_removal`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `first_parse_parsers`
+- `first_parse_copies`
+- `second_parse_parsers`
+- `second_parse_copies`
+
+---
+
+### Clone Class 3
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test assigns `code1` and `code2` via `dedent(...)`, initializes with `code1`, parses `code2` with `parsers` and `expect_error_leaves=True`, then parses `code1` with `parsers`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_dedent_end_positions`
+  - File: `<provided test file>`, Function: `test_dont_copy_error_leaves`
+  - File: `<provided test file>`, Function: `test_wrong_indent_in_def`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `first_parse_parsers`
+- `second_parse_parsers`
+
+---
+
+### Clone Class 4
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test assigns `code1` and `code2` via `dedent(...)`, initializes with `code1`, parses `code2` with `copies`, `parsers`, and `expect_error_leaves=True`, then parses `code1` with the same keyword shape including `expect_error_leaves=True`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_import_opening_bracket`
+  - File: `<provided test file>`, Function: `test_opening_bracket_at_end`
+  - File: `<provided test file>`, Function: `test_open_bracket_case2`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `first_parse_copies`
+- `first_parse_parsers`
+- `second_parse_copies`
+- `second_parse_parsers`
+
+---
+
+### Clone Class 5
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test assigns `code1` and `code2` via `dedent(...)`, initializes with `code1`, and performs exactly one parse of `code2` with `parsers`, `copies`, and `expect_error_leaves=True`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_classes_with_error_leaves`
+  - File: `<provided test file>`, Function: `test_error_dedent_in_function`
+  - File: `<provided test file>`, Function: `test_with_formfeed`
+  - File: `<provided test file>`, Function: `test_repeating_invalid_indent`
+  - File: `<provided test file>`, Function: `test_invalid_function`
+  - File: `<provided test file>`, Function: `test_async_func2`
+  - File: `<provided test file>`, Function: `test_weird_ending`
+  - File: `<provided test file>`, Function: `test_nested_class`
+  - File: `<provided test file>`, Function: `test_class_with_paren_breaker`
+  - File: `<provided test file>`, Function: `test_fstring_with_error_leaf`
+  - File: `<provided test file>`, Function: `test_backslash_before_def`
+  - File: `<provided test file>`, Function: `test_one_line_function_error_recovery`
+  - File: `<provided test file>`, Function: `test_one_line_property_error_recovery`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `parse_parsers`
+- `parse_copies`
+
+---
+
+### Clone Class 6
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test assigns `code1` and `code2` via `dedent(...)`, initializes with `code1`, and performs exactly one parse of `code2` with `parsers` and `copies`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_unfinished_nodes`
+  - File: `<provided test file>`, Function: `test_node_insertion`
+  - File: `<provided test file>`, Function: `test_in_parentheses_newlines`
+  - File: `<provided test file>`, Function: `test_invalid_to_valid_nodes`
+  - File: `<provided test file>`, Function: `test_another_random_indent`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `parse_parsers`
+- `parse_copies`
+
+---
+
+### Clone Class 7
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests assign `code1` and `code2` via `dedent(...)`, initialize with `code1`, and perform exactly one parse of `code2` with only the `parsers` keyword.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_in_class_movements`
+  - File: `<provided test file>`, Function: `test_indentation_issue`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `parse_parsers`
+
+---
+
+### Clone Class 8
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests assign `code1` via `dedent(...)`, assign `code2` using `insert_line_into_code(...)`, initialize with `code1`, parse `code2` with `parsers`, `copies`, and `expect_error_leaves=True`, then parse `code1` again with `parsers` and `copies`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_paren_before_docstring`
+  - File: `<provided test file>`, Function: `test_wrong_backslash`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `insert_index`
+- `inserted_line`
+- `first_parse_parsers`
+- `first_parse_copies`
+- `second_parse_parsers`
+- `second_parse_copies`
+
+---
+
+### Clone Class 9
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test assigns `code1` and `code2` via `dedent(...)`, initializes with `code1`, parses `code2` with `copies`, `parsers`, and `expect_error_leaves=True`, then parses `code1` with `copies` and `parsers`.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_special_no_newline_ending`
+  - File: `<provided test file>`, Function: `test_random_character_insertion`
+  - File: `<provided test file>`, Function: `test_error_dedent_in_between`
+  - File: `<provided test file>`, Function: `test_some_other_indentation_issues`
+
+Extracted parameters:
+- `code1`: initial code snippet
+- `code2`: modified code snippet
+- `first_parse_copies`
+- `first_parse_parsers`
+- `second_parse_copies`
+- `second_parse_parsers`
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_change_and_undo`
+  - File: `<provided test file>`, Function: `test_positions`
+  - File: `<provided test file>`, Function: `test_if_simple`
+  - File: `<provided test file>`, Function: `test_for_on_one_line`
+  - File: `<provided test file>`, Function: `test_open_parentheses`
+  - File: `<provided test file>`, Function: `test_backslash`
+  - File: `<provided test file>`, Function: `test_random_unicode_characters`
+
+- Apparent similarity:
+  - These are all multi-step `differ.initialize(...)` / `differ.parse(...)` workflow tests.
+
+- Rejection reason:
+  - Different number of statements
+  - Different call sequences
+  - Different number of asserts
+  - Different parse keyword shapes
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_open_parentheses_at_end`
+  - File: `<provided test file>`, Function: `test_full_copy`
+  - File: `<provided test file>`, Function: `test_newlines_at_end`
+  - File: `<provided test file>`, Function: `test_whitespace_at_end`
+  - File: `<provided test file>`, Function: `test_add_error_indentation`
+  - File: `<provided test file>`, Function: `test_byte_order_mark2`
+
+- Apparent similarity:
+  - Each is a small initialize-and-parse test.
+
+- Rejection reason:
+  - Different parse argument expressions
+  - Different keyword argument sets
+  - Different statement counts
+
+- Correct classification:
+  - Type-3 / not safely parametrizable
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_totally_wrong_whitespace`
+  - File: `<provided test file>`, Function: `test_classes_with_error_leaves`
+
+- Apparent similarity:
+  - Both initialize with one code string and parse another code string expecting error leaves.
+
+- Rejection reason:
+  - `test_totally_wrong_whitespace` assigns raw multiline string constants directly, while `test_classes_with_error_leaves` uses `dedent(...)`.
+  - Assignment RHS structure differs.
+
+- Correct classification:
+  - Non-parametrizable Type-2 / structural mismatch
+
+---
+
+### Rejected Group 4
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_nested_if_and_scopes`
+  - File: `<provided test file>`, Function: `test_unfinished_nodes`
+  - File: `<provided test file>`, Function: `test_node_insertion`
+
+- Apparent similarity:
+  - These use `code1`/`code2` style setup followed by `differ.initialize(...)` and `differ.parse(...)`.
+
+- Rejection reason:
+  - `test_nested_if_and_scopes` constructs `code2` via `code + ...`, not via the same assignment structure as the others.
+  - Different assignment and parse structure.
+
+- Correct classification:
+  - Type-3 / structural difference
+
+---
+
+### Rejected Group 5
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_endmarker_newline`
+  - File: `<provided test file>`, Function: `test_byte_order_mark3`
+
+- Apparent similarity:
+  - Both modify or compare two related code snippets and use error-leaf parsing.
+
+- Rejection reason:
+  - Different code construction style
+  - Different parse keyword shapes
+  - Different second-parse structure
+
+- Correct classification:
+  - Type-3 / not safely parametrizable
+
+---
+
+### Rejected Group 6
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_if_removal_and_reappearence`
+  - File: `<provided test file>`, Function: `test_indentation_issues`
+  - File: `<provided test file>`, Function: `test_all_sorts_of_indentation`
+  - File: `<provided test file>`, Function: `test_some_weird_removals`
+  - File: `<provided test file>`, Function: `test_open_bracket_case1`
+
+- Apparent similarity:
+  - These tests use multiple related code snippets and repeated parsing to test state changes.
+
+- Rejection reason:
+  - Different number of assigned code snippets
+  - Extra parse calls
+  - Different call sequences
+  - Different statement counts
+
+- Correct classification:
+  - Type-3 / non-parametrizable
+
+---
+
+### Rejected Group 7
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_end_newline_with_decorator`
+  - File: `<provided test file>`, Function: `test_parent_on_decorator`
+
+- Apparent similarity:
+  - Both parse code involving decorators and then inspect the resulting syntax tree.
+
+- Rejection reason:
+  - Different number of assignments
+  - Different destructuring statements
+  - Different number of asserts
+  - Different AST-inspection structure
+
+- Correct classification:
+  - Semantic clone only / Type-3 structural difference
+
+---
+
+### Rejected Group 8
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_with_and_funcdef_in_call`
+  - File: `<provided test file>`, Function: `test_paren_before_docstring`
+  - File: `<provided test file>`, Function: `test_wrong_backslash`
+
+- Apparent similarity:
+  - These use `insert_line_into_code(...)` to construct modified code.
+
+- Rejection reason:
+  - `test_with_and_funcdef_in_call` has a `pytest.mark.parametrize` decorator.
+  - Different function signature: `(differ, prefix)` vs `(differ)`.
+  - Different `code1` construction using `prefix + dedent(...)`.
+  - Different parse keyword shapes.
+
+- Correct classification:
+  - Rejected: different decorators and different fixtures/signatures
+
+---
+
+### Rejected Group 9
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_byte_order_mark`
+  - File: `<provided test file>`, Function: `test_byte_order_mark2`
+  - File: `<provided test file>`, Function: `test_byte_order_mark3`
+
+- Apparent similarity:
+  - All test byte-order-mark handling.
+
+- Rejection reason:
+  - Different statement counts
+  - Different initialization/parse sequences
+  - Different code construction
+  - Semantic similarity only is insufficient
+
+- Correct classification:
+  - Semantic clone only / Type-3 structural difference
+
+---
+
+### Rejected Group 10
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_async_copy`
+  - File: `<provided test file>`, Function: `test_dont_copy_dedents_in_beginning`
+  - File: `<provided test file>`, Function: `test_import_opening_bracket`
+  - File: `<provided test file>`, Function: `test_opening_bracket_at_end`
+  - File: `<provided test file>`, Function: `test_open_bracket_case2`
+
+- Apparent similarity:
+  - These initialize with `code1`, parse `code2`, and then often parse `code1` again.
+
+- Rejection reason:
+  - `test_async_copy` has `expect_error_leaves=True` on the second parse, not the first.
+  - `test_dont_copy_dedents_in_beginning` uses a different keyword order/shape on the second parse.
+  - The accepted subgroup is only the structurally equivalent set: `test_import_opening_bracket`, `test_opening_bracket_at_end`, and `test_open_bracket_case2`.
+
+- Correct classification:
+  - Partially Type-2 within the accepted subgroup; otherwise Type-3 / not safely parametrizable.
+--------------------------------------------------
+Processing: test/test_dump_tree.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 4
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 2
+
+Main reasons for rejection:
+
+- Different decorators / incompatible parametrization shapes
+- Different function signatures / fixtures
+- Different number of executable statements
+- Different assertion counts
+- Different control-flow structures
+- Only partial or semantic similarity, not safely parametrizable as Type-2 clones
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_dump_parser_tree`
+  - File: `<input>`, Function: `test_dump_parser_tree_not_top_level_module`
+
+- Apparent similarity:
+  - Both tests verify `dump()` output.
+  - Both compare a dump result against an expected dump string.
+  - Both evaluate the dump result with `eval(...)` and compare recovered code.
+
+- Rejection reason:
+  - Different decorators: both are parametrized, but their `pytest.mark.parametrize` decorators have different parameter lists and value shapes.
+    - `test_dump_parser_tree`: `indent, expected_dump`
+    - `test_dump_parser_tree_not_top_level_module`: `node, expected_dump, expected_code`
+  - Different function signatures.
+  - Different number of executable statements.
+    - `test_dump_parser_tree` assigns `code`, parses it into `module`, calls `module.dump(indent=indent)`, then evaluates `expected_dump`.
+    - `test_dump_parser_tree_not_top_level_module` receives `node` directly, calls `node.dump()`, and evaluates `dump_result`.
+  - Different call structure:
+    - `module.dump(indent=indent)` vs `node.dump()`
+    - `eval(expected_dump)` vs `eval(dump_result)`
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<input>`, Function: `test_dump_parser_tree_invalid_args`
+  - File: `<input>`, Function: `test_eval_dump_recovers_parent`
+
+- Apparent similarity:
+  - Both start by parsing the same code string:
+    - `parse("lambda x, y: x + y")`
+  - Both exercise parser tree behavior related to `dump()` or evaluated dump output.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different assertion/control structure.
+    - `test_dump_parser_tree_invalid_args` uses a `with pytest.raises(TypeError)` block.
+    - `test_eval_dump_recovers_parent` performs multiple parent-reference assertions.
+  - Different control flow due to the `with` statement in only one test.
+  - Semantic similarity only; they test related parser-tree behavior but with different structures.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test/test_error_recovery.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 9
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+
+Main reasons for rejection:
+
+- Different number of executable statements.
+- Different number of assertions.
+- Different destructuring / assignment structure.
+- Different function call structure.
+- Different control-flow or nested statement structure.
+- Similar setup or intent only, but not safely parametrizable as Type-2 clones.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+Functions:
+
+- File: `<provided>`, Function: `test_invalid_token`
+- File: `<provided>`, Function: `test_invalid_token_in_fstr`
+
+Apparent similarity:
+
+- Both tests parse invalid syntax involving `?`.
+- Both destructure parser output into error-related nodes.
+- Both assert values and types of `q` and surrounding parsed nodes.
+
+Rejection reason:
+
+- Different number of statements.
+- Different number of assertions.
+- Different destructuring structure:
+  - `test_invalid_token` destructures four children.
+  - `test_invalid_token_in_fstr` destructures six children.
+- Different call structure:
+  - `parse(...)`
+  - `load_grammar(...).parse(...)`
+- Additional assertions in `test_invalid_token_in_fstr` for `error1` and `error2`.
+
+Correct classification:
+
+- Type-3 / structural difference.
+- Not safely parametrizable as Type-2.
+
+---
+
+#### Rejected Group 2
+
+Functions:
+
+- File: `<provided>`, Function: `test_dedent_issues1`
+- File: `<provided>`, Function: `test_dedent_issues2`
+- File: `<provided>`, Function: `test_dedent_issues3`
+
+Apparent similarity:
+
+- All three tests construct source code using `dedent(...)`.
+- All parse using `load_grammar(version='3.8').parse(code)`.
+- All inspect `klass.children[-1]` as `suite`.
+- All validate parser behavior around indentation or dedentation issues.
+
+Rejection reason:
+
+- Different number of statements.
+- Different number of assertions.
+- Different assertion structures.
+- `test_dedent_issues2` introduces an additional assignment:
+
+  ```python
+  if_ = suite.children[3]
+  ```
+
+- `test_dedent_issues2` inspects nested `if` / `else` suite structure, which the others do not.
+- `test_dedent_issues3` includes additional assertions for `len(...)`, `token_type`, and multiple suite children not present in the others.
+- The tests share setup and theme, but not a single equivalent syntactic template.
+
+Correct classification:
+
+- Type-3 / structural difference.
+- Semantic clone family only.
+- Not safely parametrizable as Type-2.
+
+---
+
+#### Rejected Group 3
+
+Functions:
+
+- File: `<provided>`, Function: `test_if_else`
+- File: `<provided>`, Function: `test_if_stmt`
+
+Apparent similarity:
+
+- Both parse malformed `if` / `else` code.
+- Both inspect parser output related to `if_stmt`.
+- Both verify error nodes involving `f.` and `g(`.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different number of assertions.
+- Different destructuring structure:
+  - `test_if_else` destructures an `if_stmt` with an explicit `else` suite.
+  - `test_if_stmt` destructures only the first inline `if` portion and then inspects remaining module children separately.
+- `test_if_stmt` contains several additional assertions for `newline`, `error_leaf`, `else`, `:`, and `in_else_stmt`.
+- The executable structure is meaningfully different.
+
+Correct classification:
+
+- Type-3 / structural difference.
+- Not safely parametrizable as Type-2.
+--------------------------------------------------
+Processing: test/test_file_python_errors.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None; only one test function was present, so no clone candidates exist.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups.
+--------------------------------------------------
+Processing: test/test_normalizer_issues_files.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None. Only one pytest test function was present, so no clone candidates exist.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups.
+--------------------------------------------------
+Processing: test/test_pep8.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different number of statements in the test bodies
+  - Different number and structure of assertions/calls
+  - Similar helper structure, but the full test functions are not structurally equivalent
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `test_eof_newline`
+  - File: `<provided file>`, Function: `test_eof_blankline`
+
+- Apparent similarity:
+  - Both tests define a nested helper function named `assert_issue`.
+  - The nested helper has the same structure:
+    - calls `issues(code)`
+    - asserts that exactly one issue was found
+    - unpacks the single issue
+    - asserts a specific `issue.code`
+  - The expected issue code differs: `292` vs `391`.
+  - Both tests then call the helper with string inputs.
+
+- Rejection reason:
+  - Different number of statements in the outer test body.
+  - `test_eof_newline` contains additional `assert not issues(...)` assertions before calling `assert_issue`.
+  - `test_eof_newline` has more helper calls than `test_eof_blankline`.
+  - The full test function bodies are therefore not structurally equivalent.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+--------------------------------------------------
+Processing: test/test_tokenize.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 24
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 2
+- Total number of cloned test functions included in accepted clone classes: 5
+- Total number of rejected candidate groups: 5
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different call / attribute / subscript structure
+  - Different decorators or parametrization structure
+  - Different function signatures / fixtures
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: The test bodies have the same executable structure:
+  1. assign a string to `fundef`
+  2. call `_get_token_list(fundef)`
+  3. assert equality against a two-element list of `PythonToken(...)` objects
+
+  The only differences are literal string contents and expected source positions.
+
+- Members:
+  - File: `<input file>`, Function: `test_tokenize_multiline_I`
+  - File: `<input file>`, Function: `test_tokenize_multiline_II`
+  - File: `<input file>`, Function: `test_tokenize_multiline_III`
+
+- Extracted parameters:
+  - `source`: the multiline/string input assigned to `fundef`
+  - `expected_endmarker_pos`: expected position of the `ENDMARKER` token
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: The test bodies have the same executable structure:
+  1. assign `code = dedent("""...""")`
+  2. assign `lst = _get_token_list(code)`
+  3. assign an `expected` list of token types
+  4. assert `[t.type for t in lst] == expected`
+
+  The only differences are the dedented code snippet and the expected token-type sequence.
+
+- Members:
+  - File: `<input file>`, Function: `test_indent_error_recovery`
+  - File: `<input file>`, Function: `test_error_token_after_dedent`
+
+- Extracted parameters:
+  - `code`: dedented source code snippet
+  - `expected`: expected list of token types
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<input file>`, Function: `test_end_pos_one_line`
+  - File: `<input file>`, Function: `test_end_pos_multi_line`
+
+- Apparent similarity:
+  - Both parse a dedented function definition.
+  - Both navigate the parsed tree.
+  - Both assert an `.end_pos` tuple.
+
+- Rejection reason:
+  - Different call / attribute / subscript structure.
+  - The tree navigation differs meaningfully:
+    - `get_suite().children[-1]`
+    - `get_suite().children[1].children[0]`
+    - `simple_stmt.children[0].get_rhs()`
+    - `expr_stmt.get_rhs().children[0]`
+
+- Correct classification:
+  - Type-3 / structural difference, not safely parametrizable.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<input file>`, Function: `test_simple_no_whitespace`
+  - File: `<input file>`, Function: `test_simple_with_whitespace`
+
+- Apparent similarity:
+  - Both tokenize a simple docstring string.
+  - Both check token prefix and token value.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different number of asserts.
+  - `test_simple_with_whitespace` additionally checks an `INDENT`, a `STRING` token type, and a `NEWLINE`.
+
+- Correct classification:
+  - Type-3 / structural difference.
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<input file>`, Function: `test_error_literal`
+  - File: `<input file>`, Function: `test_error_string`
+  - File: `<input file>`, Function: `test_form_feed`
+
+- Apparent similarity:
+  - These tests tokenize malformed or unusual string literals.
+  - They assert properties of `ERRORTOKEN`, prefixes, strings, and end markers.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different number of asserts.
+  - Different unpacking structures:
+    - `test_error_literal` performs two separate tokenizations.
+    - `test_error_string` unpacks five tokens from one tokenization.
+    - `test_form_feed` unpacks four tokens from a `dedent(...)` call.
+  - Different assertion targets and token sequences.
+
+- Correct classification:
+  - Type-3 / structural difference.
+
+---
+
+### Rejected Group 4
+
+- Functions:
+  - File: `<input file>`, Function: `test_brackets_no_indentation`
+  - File: `<input file>`, Function: `test_carriage_return`
+
+- Apparent similarity:
+  - Both tokenize source code.
+  - Both assert `[t.type for t in lst] == [...]`.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - `test_brackets_no_indentation` assigns `code = dedent("""...""")`, then tokenizes `code`.
+  - `test_carriage_return` directly tokenizes a string literal without a separate `code` assignment.
+  - This would require restructuring the tests to parametrize safely.
+
+- Correct classification:
+  - Non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 5
+
+- Functions:
+  - File: `<input file>`, Function: `test_token_types`
+  - File: `<input file>`, Function: `test_fstring_token_types`
+  - File: `<input file>`, Function: `test_fstring_assignment_expression`
+
+- Apparent similarity:
+  - All are parametrized token-type tests.
+  - All compute `actual_types` and compare them against `types + [ENDMARKER]`.
+
+- Rejection reason:
+  - Different decorators / parametrization shapes.
+  - Different function signatures / fixtures:
+    - `test_token_types(code, types)`
+    - `test_fstring_token_types(code, types, each_version)`
+    - `test_fstring_assignment_expression(code, types, version_ge_py38)`
+  - Different `_get_token_list(...)` call arity:
+    - `_get_token_list(code)`
+    - `_get_token_list(code, each_version)`
+    - `_get_token_list(code, version_ge_py38)`
+  - Assertion operand order also differs between `test_token_types` and the f-string tests.
+
+- Correct classification:
+  - Rejected: different decorators and different fixtures/signatures.
+--------------------------------------------------
+Processing: test/test_get_code.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 4
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different assertion/call structure
+  - Different decorators and function signatures
+  - Semantic similarity only, not safely parametrizable
+  - Existing parametrization not structurally equivalent to other tests
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_basic_parsing`
+  - File: `<provided test file>`, Function: `test_operators`
+
+- Apparent similarity:
+  - Both parse some source code with `parse(...)`.
+  - Both compare the parser output against the original source using `diff_code_assert(...)`.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - `test_basic_parsing` has:
+    - one assignment;
+    - one `diff_code_assert(...)` call.
+  - `test_operators` has:
+    - one source assignment;
+    - one parse assignment;
+    - one `diff_code_assert(...)` call.
+  - The setup structure is therefore different.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_get_code`
+  - File: `<provided test file>`, Function: `test_full_code_round_trip`
+
+- Apparent similarity:
+  - Both verify that `parse(...).get_code()` round-trips back to the original source string.
+
+- Rejection reason:
+  - Different decorators.
+    - `test_full_code_round_trip` is already parametrized.
+    - `test_get_code` is not parametrized.
+  - Different function signatures.
+    - `test_get_code()` takes no fixtures or parameters.
+    - `test_full_code_round_trip(code)` takes one parameter.
+  - Different number of executable statements.
+    - `test_get_code` assigns a multiline string to `s` and then asserts.
+    - `test_full_code_round_trip` only asserts using the parametrized `code`.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable Type-2.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_carriage_return_at_end`
+  - File: `<provided test file>`, Function: `test_full_code_round_trip`
+
+- Apparent similarity:
+  - Both are already parametrized tests involving `parse(code)`.
+  - Both check round-trip behavior involving `get_code()`.
+
+- Rejection reason:
+  - Different parametrization shapes.
+    - `test_carriage_return_at_end` parametrizes `code` and `types`.
+    - `test_full_code_round_trip` parametrizes only `code`.
+  - Different function signatures.
+    - `test_carriage_return_at_end(code, types)`
+    - `test_full_code_round_trip(code)`
+  - Different body structure.
+    - `test_carriage_return_at_end` assigns `tree = parse(code)` and has three assertions.
+    - `test_full_code_round_trip` has one assertion and no assignment.
+  - Different number of asserts.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 4
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_basic_parsing`
+  - File: `<provided test file>`, Function: `test_get_code`
+  - File: `<provided test file>`, Function: `test_full_code_round_trip`
+
+- Apparent similarity:
+  - All validate that source code parsed by `parso.parse` can be converted back into equivalent code.
+
+- Rejection reason:
+  - Different executable structures:
+    - `test_basic_parsing` uses `diff_code_assert(...)`.
+    - `test_get_code` uses a direct equality assertion.
+    - `test_full_code_round_trip` uses a direct equality assertion with an existing parametrized input.
+  - Different decorators/signatures.
+  - Different statement counts.
+  - Semantic similarity alone is insufficient for Type-2 clone classification.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test/test_old_fast_parser.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 15
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 2
+- Total number of cloned test functions included in accepted clone classes: 12
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of executable statements.
+  - Different `check_p(...)` call arity / function call structure.
+  - Different assertion structure.
+  - Similar parser-testing intent but structurally different bodies.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same body structure:
+  1. assign a variable to `dedent(<multiline string>)`
+  2. call `check_p(<that variable>, <integer>)`
+
+  The only differences are the multiline source string, the assigned variable name, and the integer argument passed to `check_p`.
+
+- Members:
+  - File: `<input>`, Function: `test_for`
+  - File: `<input>`, Function: `test_class_with_class_var`
+  - File: `<input>`, Function: `test_func_with_if`
+  - File: `<input>`, Function: `test_decorator`
+  - File: `<input>`, Function: `test_nested_funcs`
+  - File: `<input>`, Function: `test_multi_line_params`
+  - File: `<input>`, Function: `test_class_func_if`
+  - File: `<input>`, Function: `test_multi_line_for`
+  - File: `<input>`, Function: `test_strange_parentheses`
+  - File: `<input>`, Function: `test_additional_indent`
+
+Extracted parameters:
+
+- `source_text`: multiline string passed to `dedent(...)`
+- `number_parsers_used`: second positional argument passed to `check_p(...)`
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same executable structure after ignoring the docstring in `test_fake_parentheses`:
+  1. assign a variable to `dedent(<multiline string>)`
+  2. call `check_p(<that variable>, <int>, <int>, <int>)`
+
+  The only differences are the multiline source string, the assigned variable name, and numeric argument values.
+
+- Members:
+  - File: `<input>`, Function: `test_fake_parentheses`
+  - File: `<input>`, Function: `test_parentheses_in_string`
+
+Extracted parameters:
+
+- `source_text`: multiline string passed to `dedent(...)`
+- `number_parsers_used`: second positional argument passed to `check_p(...)`
+- `number_of_splits`: third positional argument passed to `check_p(...)`
+- `number_of_misses`: fourth positional argument passed to `check_p(...)`
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<input>`, Function: `test_for`
+  - File: `<input>`, Function: `test_fake_parentheses`
+  - File: `<input>`, Function: `test_parentheses_in_string`
+
+- Apparent similarity:
+  - All assign a dedented source string to a local variable and then call `check_p(...)`.
+
+- Rejection reason:
+  - Different function call structure.
+  - `test_for` calls `check_p(src, 1)` with 2 positional arguments.
+  - `test_fake_parentheses` and `test_parentheses_in_string` call `check_p(...)` with 4 positional arguments.
+
+- Correct classification:
+  - Non-parametrizable as one combined Type-2 group.
+  - They are correctly split into separate Type-2 clone classes based on `check_p(...)` arity.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<input>`, Function: `test_wrong_indentation`
+  - File: `<input>`, Function: `test_for`
+
+- Apparent similarity:
+  - Both use `src = dedent(...)` followed by `check_p(src, ...)`.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - `test_wrong_indentation` contains two separate assignment-plus-`check_p` sequences.
+  - `test_for` contains only one assignment-plus-`check_p` sequence.
+
+- Correct classification:
+  - Type-3 / structural difference.
+  - Not safely parametrizable with the single-block `check_p` tests.
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<input>`, Function: `test_carriage_return_splitting`
+  - File: `<input>`, Function: `test_round_trip`
+
+- Apparent similarity:
+  - Both build source code using `dedent(...)`, parse it, and assert something about the parsed result.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different assertion structure.
+  - Different call sequence:
+    - `test_carriage_return_splitting` mutates the source using `.replace(...)`, stores `parse(source)` in `module`, and asserts used names.
+    - `test_round_trip` directly asserts `parse(code).get_code() == code`.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable Type-2.
+--------------------------------------------------
+Processing: test/test_pgen2.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 48
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 7
+- Total number of cloned test functions included in accepted clone classes: 35
+- Total number of rejected candidate groups: 9
+
+Main reasons for rejection:
+- Different fixtures or function signatures
+- Different decorators / parametrization shapes
+- Different number of executable statements
+- Different call structure, including positional vs keyword argument differences
+- Different control-flow structure, especially `with pytest.raises(...)`
+- Semantic similarity only, without safely identical syntactic structure
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same signature, no decorators, and a single executable statement of the form `works_in_py.parse(<code>)`. They differ only in the string literal being parsed.
+
+Members:
+- File: `<provided input>`, Function: `test_async_for`
+- File: `<provided input>`, Function: `test_async_with`
+- File: `<provided input>`, Function: `test_async_with_invalid`
+- File: `<provided input>`, Function: `test_raise_3x_style`
+- File: `<provided input>`, Function: `test_annotation_1`
+- File: `<provided input>`, Function: `test_annotation_2`
+- File: `<provided input>`, Function: `test_annotation_3`
+- File: `<provided input>`, Function: `test_annotation_4`
+- File: `<provided input>`, Function: `test_annotation_5`
+- File: `<provided input>`, Function: `test_set_literal_1`
+- File: `<provided input>`, Function: `test_set_literal_2`
+- File: `<provided input>`, Function: `test_set_literal_3`
+- File: `<provided input>`, Function: `test_set_literal_4`
+- File: `<provided input>`, Function: `test_dict_unpacking`
+
+Extracted parameters:
+- `code`: source string passed to `works_in_py.parse(...)`
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same signature, no decorators, and a single executable statement of the form `works_not_in_py.parse(<code>)`. They differ only in the string literal.
+
+Members:
+- File: `<provided input>`, Function: `test_raise_2x_style_2`
+- File: `<provided input>`, Function: `test_raise_2x_style_3`
+- File: `<provided input>`, Function: `test_old_octal_notation`
+- File: `<provided input>`, Function: `test_py2_backticks`
+
+Extracted parameters:
+- `code`: source string passed to `works_not_in_py.parse(...)`
+
+---
+
+### Clone Class 3
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same signature, no decorators, and a single helper call with two positional arguments: a code string and `each_version`. The helper name differs in one case, but helper call name differences are allowed Type-2 differences when the call structure and arguments are otherwise identical.
+
+Members:
+- File: `<provided input>`, Function: `test_raise_3x_style_1`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_1`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_2`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_3`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_4`
+- File: `<provided input>`, Function: `test_annotation_6`
+- File: `<provided input>`, Function: `test_annotation_7`
+
+Extracted parameters:
+- `helper`: `_parse` or `_invalid_syntax`
+- `code`: source string passed as the first argument
+- `version`: always `each_version`
+
+---
+
+### Clone Class 4
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Each test has the same signature, no decorators, and the same two-statement structure: assign a multiline string to `s`, then call a helper with `s` and `each_version`. They differ only in the assigned string literal and, for one member, the helper function name.
+
+Members:
+- File: `<provided input>`, Function: `test_annotation_8`
+- File: `<provided input>`, Function: `test_multiline_bytes_literals`
+- File: `<provided input>`, Function: `test_multiline_bytes_tripquote_literals`
+- File: `<provided input>`, Function: `test_multiline_str_literals`
+
+Extracted parameters:
+- `helper`: `_invalid_syntax` or `_parse`
+- `source`: multiline string assigned to `s`
+
+---
+
+### Clone Class 5
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same signature, no decorators, and exactly two executable statements. Each statement is a call to `works_in_py.parse(...)` with one string argument.
+
+Members:
+- File: `<provided input>`, Function: `test_matrix_multiplication_operator`
+- File: `<provided input>`, Function: `test_py3_rb`
+
+Extracted parameters:
+- `code_0`: first source string passed to `works_in_py.parse(...)`
+- `code_1`: second source string passed to `works_in_py.parse(...)`
+
+---
+
+### Clone Class 6
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: After ignoring the function-level docstring in `test_parser_idempotency_extended_unpacking`, both tests have the same signature, no decorators, and exactly four executable statements. Each statement is a call to `works_in_py.parse(...)` with one string argument.
+
+Members:
+- File: `<provided input>`, Function: `test_await_expr`
+- File: `<provided input>`, Function: `test_parser_idempotency_extended_unpacking`
+
+Extracted parameters:
+- `code_0`: first source string passed to `works_in_py.parse(...)`
+- `code_1`: second source string passed to `works_in_py.parse(...)`
+- `code_2`: third source string passed to `works_in_py.parse(...)`
+- `code_3`: fourth source string passed to `works_in_py.parse(...)`
+
+---
+
+### Clone Class 7
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same signature, no decorators, and exactly two executable statements: first `_parse(<valid_code>, each_version)`, then `_invalid_syntax(<invalid_code>, each_version)`. They differ only in the code string literals.
+
+Members:
+- File: `<provided input>`, Function: `test_new_octal_notation`
+- File: `<provided input>`, Function: `test_new_binary_notation`
+
+Extracted parameters:
+- `valid_code`: source string passed to `_parse(...)`
+- `invalid_code`: source string passed to `_invalid_syntax(...)`
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+- File: `<provided input>`, Function: `test_raise_2x_style_invalid_1`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_1`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_2`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_3`
+- File: `<provided input>`, Function: `test_raise_3x_style_invalid_4`
+
+Apparent similarity:
+- All validate invalid `raise` syntax using `_invalid_syntax(...)`.
+
+Rejection reason:
+- Different call structure.
+- `test_raise_2x_style_invalid_1` uses `version=each_version` as a keyword argument, while the others pass `each_version` positionally.
+
+Correct classification:
+- Non-parametrizable Type-2 candidate with this full group. The positional-argument subset is accepted separately.
+
+---
+
+### Rejected Group 2
+
+Functions:
+- File: `<provided input>`, Function: `test_yield_from`
+- File: `<provided input>`, Function: `test_ellipsis`
+
+Apparent similarity:
+- Both have signature `(works_in_py, each_version)` and combine successful parsing with another parser/helper call.
+
+Rejection reason:
+- Different number of executable statements.
+- Different call sequence.
+- Different helper call structure.
+
+Correct classification:
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 3
+
+Functions:
+- File: `<provided input>`, Function: `test_except_new`
+- File: `<provided input>`, Function: `test_except_old`
+
+Apparent similarity:
+- Both construct a multiline `try/except` code snippet and parse it.
+
+Rejection reason:
+- Different fixtures/signatures: `each_version` vs `works_not_in_py`.
+- Different call structure: `_parse(s, each_version)` vs `works_not_in_py.parse(s)`.
+
+Correct classification:
+- Semantic clone only / not safely parametrizable.
+
+---
+
+### Rejected Group 4
+
+Functions:
+- File: `<provided input>`, Function: `test_left_recursion`
+- File: `<provided input>`, Function: `test_ambiguities`
+
+Apparent similarity:
+- Both use `pytest.raises(ValueError, match=...)` around `generate_grammar(...)`.
+
+Rejection reason:
+- Different decorators: `test_ambiguities` is parametrized, `test_left_recursion` is not.
+- Different function signatures.
+- Different parameter sources.
+
+Correct classification:
+- Non-parametrizable Type-2 candidate / rejected due to decorators and signatures.
+
+---
+
+### Rejected Group 5
+
+Functions:
+- File: `<provided input>`, Function: `test_async_var`
+- File: `<provided input>`, Function: `test_raise_2x_style_2`
+- File: `<provided input>`, Function: `test_raise_2x_style_3`
+- File: `<provided input>`, Function: `test_old_octal_notation`
+- File: `<provided input>`, Function: `test_py2_backticks`
+
+Apparent similarity:
+- All ultimately call `works_not_in_py.parse(...)` with one code value.
+
+Rejection reason:
+- `test_async_var` is already parametrized.
+- Different decorators.
+- Different signatures: `test_async_var` receives `code`, while the others only receive `works_not_in_py`.
+
+Correct classification:
+- Rejected due to different decorators/signatures. The undecorated subset is accepted separately.
+
+---
+
+### Rejected Group 6
+
+Functions:
+- File: `<provided input>`, Function: `test_async_for_comprehension_newline`
+- File: `<provided input>`, Function: `test_async_for`
+- File: `<provided input>`, Function: `test_async_with`
+
+Apparent similarity:
+- All test async syntax parsed through `works_in_py.parse(...)`.
+
+Rejection reason:
+- Different decorators: `test_async_for_comprehension_newline` is parametrized.
+- Different signatures.
+- Different argument expression structure: formatted string using `.format(body)` vs direct string literal.
+
+Correct classification:
+- Semantic clone only / not safely parametrizable with the others.
+
+---
+
+### Rejected Group 7
+
+Functions:
+- File: `<provided input>`, Function: `test_py2_string_prefixes`
+- File: `<provided input>`, Function: `test_py3_rb`
+
+Apparent similarity:
+- Both test string-prefix parsing behavior.
+
+Rejection reason:
+- Different fixtures/signatures: `works_not_in_py` vs `works_in_py`.
+- Different number of executable statements.
+- `test_py2_string_prefixes` contains an additional `_invalid_syntax(...)` call.
+
+Correct classification:
+- Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 8
+
+Functions:
+- File: `<provided input>`, Function: `test_class_new_syntax`
+- File: `<provided input>`, Function: `test_matrix_multiplication_operator`
+- File: `<provided input>`, Function: `test_await_expr`
+- File: `<provided input>`, Function: `test_parser_idempotency_extended_unpacking`
+
+Apparent similarity:
+- All consist of repeated `works_in_py.parse(...)` calls.
+
+Rejection reason:
+- Different number of executable statements.
+- Different call sequence lengths.
+
+Correct classification:
+- Type-3 / structural difference. Smaller same-length subsets are accepted separately.
+
+---
+
+### Rejected Group 9
+
+Functions:
+- File: `<provided input>`, Function: `test_new_octal_notation`
+- File: `<provided input>`, Function: `test_new_binary_notation`
+- File: `<provided input>`, Function: `test_old_octal_notation`
+- File: `<provided input>`, Function: `test_long_notation`
+
+Apparent similarity:
+- All test numeric literal notation parsing.
+
+Rejection reason:
+- Different fixtures/signatures.
+- Different number of executable statements.
+- Different helper/call structure.
+
+Correct classification:
+- Semantic clone only as a full group. The structurally equivalent `test_new_octal_notation` / `test_new_binary_notation` subset is accepted separately.
+--------------------------------------------------
+Processing: test/test_cache.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different control flow structures, e.g. `with`, `for`, `try/finally`
+  - Different decorators
+  - Different fixtures/signatures
+  - Different call sequences
+  - Semantic/cache-related similarity only, not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `test_modulepickling_change_cache_dir`
+  - File: `<provided file>`, Function: `test_modulepickling_simulate_deleted_cache`
+
+- Apparent similarity:
+  - Both test cache persistence behavior.
+  - Both create or load grammar/cache-related objects.
+  - Both save something to the filesystem-backed cache.
+  - Both clear `parser_cache`.
+  - Both eventually assert that a later cache lookup returns `None`.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different decorators: `test_modulepickling_simulate_deleted_cache` has `@pytest.mark.usefixtures("isolated_parso_cache")`; the other does not.
+  - Different control flow: `test_modulepickling_simulate_deleted_cache` contains a `with open(...)` block.
+  - Different call sequence: one uses `_save_to_file_system` and `load_stored_item`; the other uses `try_to_save_module`, `load_module`, `os.unlink`, and `_get_hashed_path`.
+  - Not safely parametrizable without changing the structure.
+
+- Correct classification:
+  - Type-3 / semantic clone only, not a parametrizable Type-2 clone.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided file>`, Function: `test_cache_limit`
+  - File: `<provided file>`, Function: `test_permission_error`
+
+- Apparent similarity:
+  - Both interact with `parser_cache`.
+  - Both call `parse(...)`.
+  - Both use `try/finally` to ensure `parser_cache.clear()` is called.
+
+- Rejection reason:
+  - Different decorators: `test_permission_error` has `@skip_pypy`; `test_cache_limit` does not.
+  - Different fixtures/signatures: `test_permission_error(monkeypatch)` vs `test_cache_limit()`.
+  - Different executable structure inside the `try` block.
+  - `test_permission_error` uses `monkeypatch.setattr(...)` and `with pytest.warns(...)`; `test_cache_limit` does not.
+  - Different assertion structure and call sequence.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided file>`, Function: `test_inactive_cache`
+  - File: `<provided file>`, Function: `test_permission_error`
+
+- Apparent similarity:
+  - Both are decorated with `@skip_pypy`.
+  - Both exercise cache behavior.
+  - Both call `parse(...)`.
+  - Both interact with cache cleanup or filesystem-cache behavior.
+
+- Rejection reason:
+  - Different fixtures/signatures: `test_inactive_cache(tmpdir, isolated_parso_cache)` vs `test_permission_error(monkeypatch)`.
+  - Different control flow: `test_inactive_cache` uses loops and filesystem timestamp mutation; `test_permission_error` uses an inner function, monkeypatching, `try/finally`, and `with pytest.warns(...)`.
+  - Different number of assertions.
+  - Different call sequence and tested behavior.
+  - Semantic similarity only.
+
+- Correct classification:
+  - Semantic clone only / not safely parametrizable.
+--------------------------------------------------
+Processing: test/test_fstring.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 4
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of asserts
+  - Different control flow, especially `with pytest.raises(...)`
+  - Different function call structure
+  - Different decorators / parametrization shapes
+  - Different fixtures or function signatures
+  - Semantic similarity only, not safely parametrizable
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `test_valid`
+  - File: `<provided file>`, Function: `test_roundtrip`
+
+- Apparent similarity:
+  - Both tests parse `code` using `grammar.parse(...)`.
+  - Both compare `get_code()` output against the original `code`.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of asserts.
+  - Different decorators / parametrization shapes.
+  - Different fixture/signature ordering: `test_valid(code, grammar)` vs `test_roundtrip(grammar, code)`.
+  - `test_valid` has an additional intermediate assignment and an additional assertion checking `fstring.type == 'fstring'`.
+
+- Correct classification:
+  - Type-3 / non-parametrizable structural similarity.
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided file>`, Function: `test_invalid`
+  - File: `<provided file>`, Function: `test_roundtrip`
+
+- Apparent similarity:
+  - Both are parametrized over `code`.
+  - Both call `grammar.parse(code, ...)` or `grammar.parse(code)`.
+
+- Rejection reason:
+  - Different control flow: `test_invalid` uses `with pytest.raises(ParserSyntaxError)`, while `test_roundtrip` does not.
+  - Different number of statements.
+  - Different number of asserts: `test_roundtrip` has an assertion, `test_invalid` has none.
+  - Different call structure: `test_invalid` calls `grammar.parse` twice with different `error_recovery` keyword values; `test_roundtrip` calls it once without that keyword.
+  - Different fixtures/signatures: `test_invalid(code, grammar)` vs `test_roundtrip(grammar, code)`.
+
+- Correct classification:
+  - Type-3 / semantic similarity only.
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided file>`, Function: `test_valid`
+  - File: `<provided file>`, Function: `test_invalid`
+
+- Apparent similarity:
+  - Both are parametrized over a single `code` argument.
+  - Both use the `grammar` fixture.
+  - Both exercise parsing of f-string source code.
+
+- Rejection reason:
+  - Different executable structure.
+  - Different control flow: `test_invalid` uses `with pytest.raises(...)`; `test_valid` does not.
+  - Different number of statements.
+  - Different number of asserts.
+  - Different behavior: one expects successful parsing, the other expects a `ParserSyntaxError`.
+  - Not safely parametrizable without adding conditionals or changing behavior.
+
+- Correct classification:
+  - Semantic clone only / Type-4-style similarity, not a parametrizable Type-2 clone.
+--------------------------------------------------
+Processing: test/test_parser.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 20
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 8
+
+Main reasons for rejection:
+
+- Different number of executable statements
+- Different number of assertions
+- Different function call structure
+- Different decorators / existing parametrization shapes
+- Different fixtures or function signatures
+- Structural similarity only at a high level, not safely parametrizable
+- Semantic similarity without equivalent syntax
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<input>`, Function: `test_named_expression`
+- File: `<input>`, Function: `test_extended_rhs_annassign`
+
+Apparent similarity:
+
+- Both use the `works_ge_py38` fixture.
+- Both call `.parse(...)` on that fixture with Python 3.8-related syntax snippets.
+
+Rejection reason:
+
+- Different number of executable statements.
+- `test_named_expression` contains one parse call.
+- `test_extended_rhs_annassign` contains two parse calls.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<input>`, Function: `test_positional_only_arguments`
+- File: `<input>`, Function: `test_decorator_expression`
+
+Apparent similarity:
+
+- Both are already parametrized tests.
+- Both call a fixture’s `.parse(...)` method with a formatted code string.
+
+Rejection reason:
+
+- Different fixtures/signatures:
+  - `test_positional_only_arguments(works_ge_py38, param_code)`
+  - `test_decorator_expression(works_ge_py39, expression)`
+- Different decorators / parametrization shapes:
+  - Different parametrized argument names.
+  - Different numbers of parameter values.
+- Existing parametrized tests should only be merged when decorators, signatures, and bodies are structurally equivalent.
+
+Correct classification:
+
+- Non-parametrizable Type-2 candidate / rejected due to decorators and signatures.
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<input>`, Function: `test_basic_parsing`
+- File: `<input>`, Function: `test_param_splitting`
+
+Apparent similarity:
+
+- Both define a nested helper function.
+- Both call the helper multiple times with code strings.
+
+Rejection reason:
+
+- Different helper function bodies.
+- Different number of helper calls:
+  - `test_basic_parsing` calls `compare(...)` four times.
+  - `test_param_splitting` calls `check(...)` two times.
+- Different call signatures:
+  - `compare(string)`
+  - `check(src, result)`
+- Different assertion structure inside the helper.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<input>`, Function: `test_subscope_names`
+- File: `<input>`, Function: `test_import_names`
+
+Apparent similarity:
+
+- Both parse source code and inspect name nodes.
+- Both assert `start_pos`, `end_pos`, and `value` properties.
+
+Rejection reason:
+
+- Different statement structure.
+- Different number of assertions.
+- Different helper behavior:
+  - One retrieves a class/function subscope.
+  - One retrieves an import node.
+- `test_subscope_names` repeats similar checks for class and function definitions.
+- `test_import_names` performs additional checks on import definitions and import node positions.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 5
+
+Functions:
+
+- File: `<input>`, Function: `test_end_pos`
+- File: `<input>`, Function: `test_dedent_at_end`
+
+Apparent similarity:
+
+- Both build a multiline string with `dedent(...)`.
+- Both parse that string.
+- Both assert properties of parsed syntax tree nodes.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different assertion targets.
+- Different call sequence:
+  - `test_end_pos` inspects a function definition returned by `iter_funcdefs()`.
+  - `test_dedent_at_end` checks regenerated code and nested suite/name nodes.
+- Different structural template.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 6
+
+Functions:
+
+- File: `<input>`, Function: `test_newline_positions`
+- File: `<input>`, Function: `test_end_pos_error_correction`
+
+Apparent similarity:
+
+- Both parse source code.
+- Both inspect `end_pos` information.
+- Both test parser position handling.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different assignment structure.
+- Different inspected nodes:
+  - `test_newline_positions` inspects an endmarker and previous newline leaf.
+  - `test_end_pos_error_correction` inspects a function node and module end position.
+- Different assertion structure.
+
+Correct classification:
+
+- Type-3 / structural difference.
+
+---
+
+### Rejected Group 7
+
+Functions:
+
+- File: `<input>`, Function: `test_incomplete_list_comprehension`
+- File: `<input>`, Function: `test_started_lambda_stmt`
+
+Apparent similarity:
+
+- Both parse invalid or incomplete Python syntax.
+- Both assert that parsing produced error-related nodes.
+
+Rejection reason:
+
+- Different assertion structure:
+  - `test_incomplete_list_comprehension` uses a list comprehension over child node types.
+  - `test_started_lambda_stmt` directly checks `m.children[0].type`.
+- Different parsed result inspection pattern.
+- Not the same structural template.
+
+Correct classification:
+
+- Semantic clone only / not safely parametrizable.
+
+---
+
+### Rejected Group 8
+
+Functions:
+
+- File: `<input>`, Function: `test_unicode_string`
+- File: `<input>`, Function: `test_backslash_dos_style`
+
+Apparent similarity:
+
+- Both are simple tests whose apparent purpose is to ensure that an operation does not raise an exception.
+
+Rejection reason:
+
+- Different number of executable statements.
+- Different APIs under test:
+  - `tree.String(...)` and `repr(...)`
+  - `parse(...)`
+- Different assertion/call structure.
+
+Correct classification:
+
+- Semantic clone only / not a parametrizable Type-2 clone.
+--------------------------------------------------
+Processing: test/test_python_errors.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- Total number of test functions analyzed: 26
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 4
+- Total number of cloned test functions included in accepted clone classes: 12
+- Total number of rejected candidate groups: 5
+
+Main reasons for rejection:
+
+- Different number of executable statements
+- Different function call structure, especially extra/missing `version=` keyword arguments
+- Different decorators or parametrization signatures
+- Different test function signatures / fixtures
+- Different assert structure, including different placement of `not`
+- Different control flow or conditional logic
+- Semantic similarity without safely identical parametrizable structure
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same signature, structurally equivalent `pytest.mark.parametrize` decorators, and identical body structure. They differ only in the literal error code passed to `assert_comparison` and in parametrized input data.
+
+Members:
+
+- File: `<input>`, Function: `test_syntax_errors`
+- File: `<input>`, Function: `test_indentation_errors`
+
+Extracted parameters:
+
+- `code`: source code string
+- `positions`: expected error positions
+- `error_code`: `901` vs `903`
+
+---
+
+### Clone Class 2
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: All tests have the same signature, structurally equivalent single-argument `pytest.mark.parametrize('code', ...)` decorators, and the same body structure: `assert not _get_error_list(code, version=<literal>)`. They differ only in parametrized code values and the version literal.
+
+Members:
+
+- File: `<input>`, Function: `test_valid_fstrings`
+- File: `<input>`, Function: `test_valid_namedexpr`
+- File: `<input>`, Function: `test_valid_namedexpr_set`
+- File: `<input>`, Function: `test_valid_namedexpr_index`
+
+Extracted parameters:
+
+- `code`: source code string
+- `version`: parser version string, e.g. `'3.6'`, `'3.8'`, `'3.9'`, `'3.10'`
+
+---
+
+### Clone Class 3
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same signature, structurally equivalent `pytest.mark.parametrize('code', ...)` decorators, and identical body structure: `assert not _get_error_list(code)`. They differ only in the parametrized code values.
+
+Members:
+
+- File: `<input>`, Function: `test_valid_empty_assignment`
+- File: `<input>`, Function: `test_valid_del`
+
+Extracted parameters:
+
+- `code`: source code string
+
+---
+
+### Clone Class 4
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have structurally equivalent parametrization over `('source', 'no_errors')`, the same function signature, and the same assertion structure except for the simple argument value inside `_get_error_list`. However, this requires preserving the same call shape. Because `test_starred_expr` includes `version="3"` while `test_unparenthesized_genexp` does not, this group is **not accepted** under the strict function-call-structure rule.
+
+Correction: this candidate is rejected, not accepted.
+
+Therefore the accepted clone class count remains 3, not 4.
+
+Revised accepted totals:
+
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 3
+- Total number of cloned test functions included in accepted clone classes: 8
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+Functions:
+
+- File: `<input>`, Function: `test_unparenthesized_genexp`
+- File: `<input>`, Function: `test_starred_expr`
+- File: `<input>`, Function: `test_lambda_in_comp_if`
+
+Apparent similarity:
+
+- These tests all check whether `_get_error_list(...)` produces errors and compare that result against a parametrized `no_errors` boolean using XOR-style assertions.
+
+Rejection reason:
+
+- Different function call structure:
+  - `test_unparenthesized_genexp` calls `_get_error_list(source)`
+  - `test_starred_expr` calls `_get_error_list(source, version="3")`
+  - `test_lambda_in_comp_if` calls `_get_error_list(source, version=version)`
+- Different decorators / parametrization shapes:
+  - Two tests parametrize `('source', 'no_errors')`
+  - One test parametrizes `('source', 'version', 'no_errors')`
+- Different function signatures
+
+Correct classification:
+
+- Rejected: non-parametrizable Type-2 / structural difference
+
+---
+
+### Rejected Group 2
+
+Functions:
+
+- File: `<input>`, Function: `test_valid_empty_assignment`
+- File: `<input>`, Function: `test_valid_del`
+- File: `<input>`, Function: `test_trailing_comma`
+
+Apparent similarity:
+
+- These tests all verify that valid source snippets produce no parser errors.
+
+Rejection reason:
+
+- `test_valid_empty_assignment` and `test_valid_del` are safely parametrizable with each other.
+- `test_trailing_comma` has a different executable structure:
+  - assignment: `errors = _get_error_list(code)`
+  - assertion: `assert not errors`
+- The other two directly assert:
+  - `assert not _get_error_list(code)`
+- Different number of executable statements
+
+Correct classification:
+
+- `test_valid_empty_assignment` and `test_valid_del`: accepted Type-2 clone class
+- Including `test_trailing_comma`: Rejected Type-3 / structural difference
+
+---
+
+### Rejected Group 3
+
+Functions:
+
+- File: `<input>`, Function: `test_valid_fstrings`
+- File: `<input>`, Function: `test_valid_namedexpr`
+- File: `<input>`, Function: `test_valid_namedexpr_set`
+- File: `<input>`, Function: `test_valid_namedexpr_index`
+- File: `<input>`, Function: `test_valid_empty_assignment`
+- File: `<input>`, Function: `test_valid_del`
+
+Apparent similarity:
+
+- These tests all assert that parsing certain source snippets produces no errors.
+
+Rejection reason:
+
+- The first four tests call `_get_error_list(code, version=<literal>)`.
+- The last two tests call `_get_error_list(code)` without a `version` keyword.
+- Different function call structure:
+  - extra/missing keyword argument
+- Not safely parametrizable as a single clone class without changing call structure or introducing conditional logic.
+
+Correct classification:
+
+- First four functions: accepted Type-2 clone class
+- Last two functions: accepted separate Type-2 clone class
+- Combined group: Rejected non-parametrizable Type-2 / structural difference
+
+---
+
+### Rejected Group 4
+
+Functions:
+
+- File: `<input>`, Function: `test_paren_kwarg`
+- File: `<input>`, Function: `test_continue_in_finally`
+- File: `<input>`, Function: `test_parenthesized_single_starred_expr`
+
+Apparent similarity:
+
+- These tests compare parser behavior across Python versions using two assertions involving `_get_error_list`.
+
+Rejection reason:
+
+- Different number of statements:
+  - `test_continue_in_finally` has an extra `code = dedent(...)` assignment.
+- Different decorators/signatures:
+  - `test_parenthesized_single_starred_expr` is parametrized over `code`.
+  - The others are not parametrized.
+- Different assert structure:
+  - The placement of `not` differs between tests.
+- Different argument structure:
+  - Some pass a variable `code`, others pass string literals directly.
+
+Correct classification:
+
+- Rejected: Type-3 / structural difference
+
+---
+
+### Rejected Group 5
+
+Functions:
+
+- File: `<input>`, Function: `test_python_exception_matches`
+- File: `<input>`, Function: `test_non_async_in_async`
+- File: `<input>`, Function: `test_default_except_error_postition`
+
+Apparent similarity:
+
+- These tests compare Parso syntax errors with Python’s actual `SyntaxError` or `IndentationError` behavior and inspect line numbers or error messages.
+
+Rejection reason:
+
+- Different decorators:
+  - `test_python_exception_matches` is parametrized.
+  - The others are not.
+- Different function signatures:
+  - `test_python_exception_matches(code)` vs no-argument tests.
+- Different number of executable statements.
+- Different control flow:
+  - `test_non_async_in_async` has version-specific `if/else`.
+  - `test_default_except_error_postition` has version-specific line-position assertions.
+- Different number and structure of assertions.
+
+Correct classification:
+
+- Rejected: Type-3 / semantic clone only
+--------------------------------------------------
+Processing: test/test_prefix.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different number of executable statements
+  - Different number of assertions
+  - Different control flow: one test contains a `for` loop and conditional logic, the other does not
+  - Different existing `pytest.mark.parametrize` argument names/shapes
+  - Not safely parametrizable without changing structure
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided file>`, Function: `test_simple_prefix_splitting`
+  - File: `<provided file>`, Function: `test_prefix_splitting_types`
+
+- Apparent similarity:
+  - Both are already parametrized pytest tests.
+  - Both parse an input string with `parso.parse(string)`.
+  - Both access `tree.children[0]`.
+  - Both assert that the leaf type is `'endmarker'`.
+  - Both call `leaf._split_prefix()` and inspect the resulting prefix tokens.
+
+- Rejection reason:
+  - Different number of statements.
+  - Different number of assertions.
+  - Different control flow: `test_simple_prefix_splitting` contains a `for` loop and an `if/else` block inside the loop; `test_prefix_splitting_types` does not.
+  - Different validation structure:
+    - `test_simple_prefix_splitting` checks individual token values and end positions.
+    - `test_prefix_splitting_types` checks only token types using a list comprehension.
+  - Existing parametrization differs:
+    - `test_simple_prefix_splitting(string, tokens)`
+    - `test_prefix_splitting_types(string, types)`
+  - Not safely parametrizable as a Type-2 clone without adding conditional logic or changing the executable structure.
+
+- Correct classification:
+  - Type-3 / semantic clone only, not a parametrizable Type-2 clone.
+--------------------------------------------------
+Processing: test/test_load_grammar.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 6
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 1
+- Total number of cloned test functions included in accepted clone classes: 2
+- Total number of rejected candidate groups: 3
+- Main reasons for rejection:
+  - Different fixtures/signatures
+  - Different decorators / existing parametrization mismatch
+  - Different executable structure
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+#### Clone Class 1
+
+- Clone type: Type-2
+- Parametrizable: Yes
+- Reason: Both tests have the same executable structure: a `with pytest.raises(...)` block containing a single `load_grammar(version=...)` call. They differ only in the expected exception type and the version value.
+
+- Members:
+  - File: `<provided test file>`, Function: `test_load_inexisting_grammar`
+  - File: `<provided test file>`, Function: `test_grammar_int_version`
+
+Extracted parameters:
+
+- `parametrized_exception`: expected raised exception  
+  - `NotImplementedError`
+  - `TypeError`
+
+- `parametrized_version`: grammar version argument  
+  - `'1.5'`
+  - `3.8`
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+#### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_load_inexisting_grammar`
+  - File: `<provided test file>`, Function: `test_invalid_grammar_version`
+
+- Apparent similarity:
+  - Both tests check that `load_grammar(version=...)` raises an exception for invalid grammar versions.
+
+- Rejection reason:
+  - Different decorators: `test_invalid_grammar_version` is already parametrized, while `test_load_inexisting_grammar` is not.
+  - Different fixtures/signatures: `test_invalid_grammar_version` takes `string`; `test_load_inexisting_grammar` takes no parameters.
+
+- Correct classification:
+  - Rejected: different decorators / different fixtures/signatures
+
+---
+
+#### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_invalid_grammar_version`
+  - File: `<provided test file>`, Function: `test_grammar_int_version`
+
+- Apparent similarity:
+  - Both tests use `pytest.raises(...)` around `load_grammar(version=...)`.
+
+- Rejection reason:
+  - Different decorators: `test_invalid_grammar_version` has an existing `pytest.mark.parametrize` decorator; `test_grammar_int_version` does not.
+  - Different fixtures/signatures: `test_invalid_grammar_version` takes `string`; `test_grammar_int_version` takes no parameters.
+
+- Correct classification:
+  - Rejected: different decorators / different fixtures/signatures
+
+---
+
+#### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_load_grammar_uses_older_syntax`
+  - File: `<provided test file>`, Function: `test_load_grammar_doesnt_warn`
+
+- Apparent similarity:
+  - Both tests make a single `load_grammar(version=...)` call.
+
+- Rejection reason:
+  - Different fixtures/signatures: `test_load_grammar_doesnt_warn` takes the `each_version` fixture; `test_load_grammar_uses_older_syntax` takes no parameters.
+
+- Correct classification:
+  - Rejected: different fixtures/signatures
+--------------------------------------------------
+Processing: test/test_parser_tree.py
+ChatGPT Response:
+## Part 1: Summary Report
+
+- **Total number of test functions analyzed:** 18
+- **Total number of parametrizable Type-1 clone classes:** 0
+- **Total number of parametrizable Type-2 clone classes:** 0
+- **Total number of cloned test functions included in accepted clone classes:** 0
+- **Total number of rejected candidate groups:** 5
+
+### Main reasons for rejection
+
+- Different assert expression structure.
+- Different comparison operators, e.g. `is` vs `==`.
+- Different attribute access paths, e.g. `param.default` vs `param.default.value`.
+- Different number of statements or asserts.
+- Different function call structure or argument counts.
+- Structural similarity only at a high level, not safely parametrizable without conditionals or dynamic behavior.
+
+---
+
+## Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+## Part 3: Rejected Candidate Groups
+
+### Rejected Group 1
+
+- Functions:
+  - File: `<provided test file>`, Function: `TestsFunctionAndLambdaParsing.test_is_generator`
+  - File: `<provided test file>`, Function: `TestsFunctionAndLambdaParsing.test_yields`
+
+- Apparent similarity:
+  - Both test methods have the same signature.
+  - Both contain a single assertion involving `node.is_generator()` and `expected.get(...)`.
+
+- Rejection reason:
+  - Different comparison operators: `is` vs `==`.
+  - The expected dictionary keys differ, which would be acceptable, but the operator difference changes the structure.
+
+- Correct classification:
+  - Rejected: Type-3 / not safely parametrizable.
+
+---
+
+### Rejected Group 2
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_default_param`
+  - File: `<provided test file>`, Function: `test_annotation_param`
+  - File: `<provided test file>`, Function: `test_default_and_annotation_param`
+  - File: `<provided test file>`, Function: `test_annotation_params`
+
+- Apparent similarity:
+  - These tests all parse a function definition, retrieve parameters using `get_params()`, and assert properties of `default`, `annotation`, and `star_count`.
+
+- Rejection reason:
+  - Different assert expression structures.
+  - Different attribute access paths, e.g. `param.default.value` vs `param.default`.
+  - Different comparison operators, e.g. `==` vs `is`.
+  - `test_annotation_params` has a different number of statements and asserts because it checks two parameters instead of one.
+
+- Correct classification:
+  - Rejected: Type-3 / non-parametrizable structural similarity.
+
+---
+
+### Rejected Group 3
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_yields`
+  - File: `<provided test file>`, Function: `test_returns`
+  - File: `<provided test file>`, Function: `test_yield_from`
+
+- Apparent similarity:
+  - These tests all parse code snippets and inspect yielded or returned syntax nodes.
+  - They use helper functions such as `get_yield_exprs()` and `get_return_stmts()` followed by assertions on `.type` or `.value`.
+
+- Rejection reason:
+  - Different number of executable statements.
+  - Different number of asserts.
+  - Different helper call signatures: `get_yield_exprs(code, version)` vs `get_return_stmts(code)`.
+  - `test_yield_from` is only a single-case subset of the larger `test_yields` structure.
+
+- Correct classification:
+  - Rejected: Type-3 / semantic clone only.
+
+---
+
+### Rejected Group 4
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_yields`
+  - File: `<provided test file>`, Function: `test_raises`
+  - File: `<provided test file>`, Function: `test_returns`
+
+- Apparent similarity:
+  - These tests validate iterator-style APIs over parsed function bodies:
+    - `iter_yield_exprs()`
+    - `iter_return_stmts()`
+    - `iter_raise_stmts()`
+
+- Rejection reason:
+  - Different statement counts.
+  - Different helper call structures.
+  - `test_raises` uses a multiline code fixture assigned to `code`, indexes different parsed children, and asserts lengths using `len(list(r))`.
+  - The others assert node `.type` and `.value`.
+
+- Correct classification:
+  - Rejected: semantic clone only / Type-4-style similarity.
+
+---
+
+### Rejected Group 5
+
+- Functions:
+  - File: `<provided test file>`, Function: `test_iter_funcdefs`
+  - File: `<provided test file>`, Function: `test_with_stmt_get_test_node_from_name`
+
+- Apparent similarity:
+  - Both assign a code string, parse it, build a list using a list comprehension, and compare the resulting list to expected string values.
+
+- Rejection reason:
+  - Different parse-expression structure:
+    - `module = parse(...)`
+    - `with_stmt = parse(...).children[0]`
+  - Different list comprehension structure.
+  - Different method calls:
+    - `module.iter_funcdefs()`
+    - `with_stmt.get_defined_names(include_setitem=True)`
+    - `with_stmt.get_test_node_from_name(name)`
+  - Not safely parametrizable without changing call structure.
+
+- Correct classification:
+  - Rejected: Type-3 / not safely parametrizable.
+--------------------------------------------------
+Processing: test/test_grammar.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 1
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection: None
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups were identified.
+--------------------------------------------------
+Processing: test/test_param_splitting.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 3
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 1
+- Main reasons for rejection:
+  - Different function call structure
+  - Different keyword argument names and counts
+  - Not safely parametrizable as Type-2 under the strict rules
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No accepted parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+Rejected Group 1:
+- Functions:
+  - File: `<input>`, Function: `test_split_params_with_separation_star`
+  - File: `<input>`, Function: `test_split_params_with_stars`
+
+- Apparent similarity:
+  - Both tests consist of three consecutive calls to `assert_params`.
+  - Each call checks parsing of function parameter strings and expected parameter/default mappings.
+  - The overall statement count and high-level call sequence are similar.
+
+- Rejection reason:
+  - Different function call structure.
+  - The corresponding `assert_params` calls use different keyword argument counts and names:
+    - First calls:
+      - `assert_params('x, y=1, *, z=3', x=None, y='1', z='3')`
+      - `assert_params('x, *args', x=None, args=None)`
+    - Second calls:
+      - `assert_params('*, x', x=None)`
+      - `assert_params('**kwargs', kwargs=None)`
+    - Third calls:
+      - `assert_params('*')`
+      - `assert_params('*args, **kwargs', args=None, kwargs=None)`
+  - Parametrizing these safely would require changing the call shape, likely by introducing dynamic `**kwargs` or restructuring the helper invocation.
+  - Under the strict rules, keyword names and argument structure must remain equivalent.
+
+- Correct classification:
+  - Non-parametrizable structural similarity / rejected Type-2 candidate.
+--------------------------------------------------
+Processing: test/test_utils.py
+ChatGPT Response:
+### Part 1: Summary Report
+
+- Total number of test functions analyzed: 5
+- Total number of parametrizable Type-1 clone classes: 0
+- Total number of parametrizable Type-2 clone classes: 0
+- Total number of cloned test functions included in accepted clone classes: 0
+- Total number of rejected candidate groups: 0
+- Main reasons for rejection:
+  - No sufficiently similar function-level clone candidates were found.
+  - Existing parametrized tests have different decorators, signatures, and body structures.
+  - Other tests have different statement counts, assertions, and call/control-flow structures.
+
+---
+
+### Part 2: Accepted Parametrizable Clone Classes
+
+No parametrizable Type-1 or Type-2 clone classes were found.
+
+---
+
+### Part 3: Rejected Candidate Groups
+
+No rejected candidate groups were identified.
+--------------------------------------------------
